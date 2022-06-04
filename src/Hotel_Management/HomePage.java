@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Hotel_Management;
-import javax.swing.*;
+
+import javax.swing.JFrame;
 
 /**
  *
@@ -12,7 +13,7 @@ import javax.swing.*;
 public class HomePage extends javax.swing.JFrame {
 
     /**
-     * Creates new form HomePage
+     * Creates new form HomePage1
      */
     public HomePage() {
         initComponents();
@@ -29,144 +30,150 @@ public class HomePage extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        foodlb = new javax.swing.JLabel();
+        drinklb = new javax.swing.JLabel();
+        servicelb = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        CustomInf = new javax.swing.JButton();
-        room = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        food = new javax.swing.JButton();
-        drink = new javax.swing.JButton();
-        service = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Home Page");
 
-        jPanel1.setBackground(new java.awt.Color(255, 51, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 153, 255));
 
-        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel1.setText("WELCOME TO VINAHOTEL");
-        jPanel1.add(jLabel1);
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-customer-50.png")); // NOI18N
+        jLabel1.setText("Customer Information");
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-room-64.png")); // NOI18N
+        jLabel2.setText("Rooms");
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-booking-50.png")); // NOI18N
+        jLabel3.setText("Booking Diary");
 
-        CustomInf.setBackground(new java.awt.Color(51, 255, 204));
-        CustomInf.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        CustomInf.setText("Customer Information");
-        CustomInf.setMaximumSize(new java.awt.Dimension(100, 2930));
-        CustomInf.setPreferredSize(new java.awt.Dimension(100, 30));
-        CustomInf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CustomInfActionPerformed(evt);
+        foodlb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        foodlb.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-meal-50.png")); // NOI18N
+        foodlb.setText("Food");
+        foodlb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                foodlbMouseClicked(evt);
             }
         });
-        jPanel3.add(CustomInf, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 183, 60));
 
-        room.setBackground(new java.awt.Color(51, 255, 204));
-        room.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        room.setText("Rooms");
-        room.setMaximumSize(new java.awt.Dimension(79, 60));
-        room.setMinimumSize(new java.awt.Dimension(79, 60));
-        room.setPreferredSize(new java.awt.Dimension(79, 60));
-        jPanel3.add(room, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 131, -1));
-
-        jButton2.setBackground(new java.awt.Color(51, 255, 204));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton2.setText("Booking Diary");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+        drinklb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        drinklb.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-drink-64.png")); // NOI18N
+        drinklb.setText("Drink");
+        drinklb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                drinklbMouseClicked(evt);
             }
         });
-        jPanel3.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, 154, 58));
 
-        food.setBackground(new java.awt.Color(51, 255, 204));
-        food.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        food.setText("Food");
-        food.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                foodActionPerformed(evt);
+        servicelb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        servicelb.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-spa-64.png")); // NOI18N
+        servicelb.setText("Services");
+        servicelb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                servicelbMouseClicked(evt);
             }
         });
-        jPanel3.add(food, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 20, 95, 60));
 
-        drink.setBackground(new java.awt.Color(51, 255, 204));
-        drink.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        drink.setText("Drink");
-        drink.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                drinkActionPerformed(evt);
-            }
-        });
-        jPanel3.add(drink, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 20, 92, 60));
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-login-50.png")); // NOI18N
+        jLabel7.setText("Log in");
 
-        service.setBackground(new java.awt.Color(51, 255, 204));
-        service.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        service.setText("Services");
-        service.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                serviceActionPerformed(evt);
-            }
-        });
-        jPanel3.add(service, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 20, 97, 60));
+        jPanel2.setBackground(new java.awt.Color(102, 204, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 521, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(foodlb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(drinklb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(servicelb, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(foodlb)
+                .addGap(18, 18, 18)
+                .addComponent(drinklb)
+                .addGap(18, 18, 18)
+                .addComponent(servicelb)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel7)
+                .addContainerGap(47, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
-        jPanel1.getAccessibleContext().setAccessibleParent(jPanel1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void CustomInfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CustomInfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CustomInfActionPerformed
-
-    private void foodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_foodActionPerformed
+    private void foodlbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foodlbMouseClicked
         // TODO add your handling code here:
         FoodPanel f = new FoodPanel();
         f.setVisible(true);
-    }//GEN-LAST:event_foodActionPerformed
+        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_foodlbMouseClicked
 
-    private void drinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drinkActionPerformed
+    private void drinklbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drinklbMouseClicked
         // TODO add your handling code here:
         DrinkPanel d = new DrinkPanel();
         d.setVisible(true);
-    }//GEN-LAST:event_drinkActionPerformed
+        d.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_drinklbMouseClicked
 
-    private void serviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serviceActionPerformed
+    private void servicelbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_servicelbMouseClicked
         // TODO add your handling code here:
         ServicesPanel s = new ServicesPanel();
         s.setVisible(true);
-    }//GEN-LAST:event_serviceActionPerformed
+        s.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_servicelbMouseClicked
 
     /**
      * @param args the command line arguments
@@ -194,6 +201,7 @@ public class HomePage extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(HomePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -204,15 +212,14 @@ public class HomePage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton CustomInf;
-    private javax.swing.JButton drink;
-    private javax.swing.JButton food;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel drinklb;
+    private javax.swing.JLabel foodlb;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JButton room;
-    private javax.swing.JButton service;
+    private javax.swing.JLabel servicelb;
     // End of variables declaration//GEN-END:variables
 }
