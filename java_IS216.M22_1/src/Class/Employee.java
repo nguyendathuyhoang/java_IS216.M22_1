@@ -47,6 +47,14 @@ public class Employee {
         this.emp_diachi = emp_diachi;
     }
     
+    public String getEmployee_sdt() {
+        return emp_sdt;
+    }
+
+    public void setEmployee_sdt(String emp_sdt) {
+        this.emp_sdt = emp_sdt;
+    }
+    
     public String getEmployee_tendn() {
         return emp_tendn;
     }

@@ -4,10 +4,17 @@
  */
 package Hotel_Management;
 
+import Class.Employee;
+import Database.StaffDb;
 import Database.DataConnection;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.text.*;
+import javax.swing.table.*;
+import java.util.Random;
+import java.awt.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 /**
  *
@@ -18,6 +25,8 @@ public class StaffManagePanel extends javax.swing.JFrame {
     PreparedStatement stat = null;
     ResultSet rs = null;
     String manv;
+    Employee emp;
+    StaffDb db = new StaffDb();
     /**
      * Creates new form StaffManagePanel
      */
@@ -25,6 +34,11 @@ public class StaffManagePanel extends javax.swing.JFrame {
         initComponents();
         manvXoa.setDocument(new JTextFieldLimit(5));
         manvEdit.setDocument(new JTextFieldLimit(5));
+        SDTadd.setDocument(new JTextFieldLimit(15));
+        TENadd.setDocument(new JTextFieldLimit(40));
+        DIACHIadd.setDocument(new JTextFieldLimit(50));
+        TENDNadd.setDocument(new JTextFieldLimit(30));
+        MKadd.setDocument(new JTextFieldLimit(30));
     }
 
     /**
@@ -73,6 +87,7 @@ public class StaffManagePanel extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jTabbedPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jTabbedPane1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -107,13 +122,13 @@ public class StaffManagePanel extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(TENadd, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(TENadd))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,23 +137,28 @@ public class StaffManagePanel extends javax.swing.JFrame {
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nvaddBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(DIACHIadd)
-                                .addComponent(SDTadd)
-                                .addComponent(TENDNadd)
-                                .addComponent(MKadd)))))
-                .addContainerGap(45, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(SDTadd)
+                            .addComponent(TENDNadd)
+                            .addComponent(DIACHIadd, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+                            .addComponent(MKadd))))
+                .addGap(73, 73, 73))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(41, 41, 41)
+                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(73, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(nvaddBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(235, 235, 235))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {DIACHIadd, MKadd, SDTadd, TENDNadd});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addContainerGap()
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -160,9 +180,9 @@ public class StaffManagePanel extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MKadd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addGap(33, 33, 33)
                 .addComponent(nvaddBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {TENadd, jLabel1});
@@ -178,9 +198,14 @@ public class StaffManagePanel extends javax.swing.JFrame {
         jTabbedPane1.addTab("Thêm nhân viên", jPanel1);
 
         manvEdit.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        manvEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manvEditActionPerformed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel7.setText("Mã nhân viên");
+        jLabel7.setText("Nhập mã nhân viên");
 
         editTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -203,37 +228,44 @@ public class StaffManagePanel extends javax.swing.JFrame {
         changeBTN.setText("Lưu thay đổi");
         changeBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         changeBTN.setEnabled(false);
+        changeBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeBTNActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(manvEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGap(97, 97, 97)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(manvEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(changeBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(142, 142, 142))
+                .addContainerGap(25, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(changeBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(235, 235, 235))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 628, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(23, 23, 23))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
-                    .addComponent(manvEdit))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(manvEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(changeBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Chỉnh sửa thông tin", jPanel2);
@@ -241,7 +273,7 @@ public class StaffManagePanel extends javax.swing.JFrame {
         jPanel3.setForeground(new java.awt.Color(240, 240, 240));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel8.setText("Mã nhân viên");
+        jLabel8.setText("Nhập mã nhân viên");
 
         manvXoa.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         manvXoa.addActionListener(new java.awt.event.ActionListener() {
@@ -299,33 +331,32 @@ public class StaffManagePanel extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(92, 92, 92)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(DIACHIremove, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(TENDNremove, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(SDTremove, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(MKremove, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(removeBUTTON, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(manvXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(removeBUTTON, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(TENremove, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(MKremove, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(TENDNremove))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(TENremove, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(manvXoa, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(DIACHIremove)
+                                .addComponent(SDTremove, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(69, 69, 69))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -356,9 +387,9 @@ public class StaffManagePanel extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MKremove, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addComponent(removeBUTTON, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39))
+                .addGap(29, 29, 29))
         );
 
         jTabbedPane1.addTab("Xóa nhân viên", jPanel3);
@@ -370,18 +401,18 @@ public class StaffManagePanel extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jTabbedPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(11, 11, 11)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -407,6 +438,31 @@ public class StaffManagePanel extends javax.swing.JFrame {
         }
     }
     
+    private String generateId(){
+        Random r = new Random(System.currentTimeMillis());
+        int int_id = ((1 + r.nextInt(2)) * 10000 + r.nextInt(10000));
+        return String.valueOf(int_id);
+    }
+    
+    private void getNewInfo(){
+        emp = new Employee();
+        emp.setEmployee_id(generateId());
+        String hoten = TENadd.getText().trim();
+        hoten = trimInnerSpaces(hoten);
+        emp.setEmployee_name(hoten);
+        String diachi = DIACHIadd.getText().trim();
+        diachi = trimInnerSpaces(diachi);
+        emp.setEmployee_diachi(diachi);
+        emp.setEmployee_sdt(SDTadd.getText().replaceAll(" ", ""));
+        emp.setEmployee_tendn(TENDNadd.getText().replaceAll(" ", ""));
+        emp.setEmployee_mk(MKadd.getText());
+    }
+    
+    private void getEmployeeInfo() {
+        emp = new Employee();
+        emp = db.getEmployee(manv);
+    }
+    
     private void clearDeletedInfo() {
         TENremove.setText("");
         DIACHIremove.setText("");
@@ -414,6 +470,14 @@ public class StaffManagePanel extends javax.swing.JFrame {
         TENDNremove.setText("");
         MKremove.setText("");
         removeBUTTON.setEnabled(false);
+    }
+    
+    private void clearAddedInfo() {
+        TENadd.setText("");
+        DIACHIadd.setText("");
+        SDTadd.setText("");
+        TENDNadd.setText("");
+        MKadd.setText("");
     }
     
     private void manvXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manvXoaActionPerformed
@@ -448,17 +512,10 @@ public class StaffManagePanel extends javax.swing.JFrame {
 
     private void removeBUTTONActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeBUTTONActionPerformed
         // TODO add your handling code here:
-        try {
-            String remove = "delete from nhanvien where manv = '" + manv + "'";
-            stat = conn.prepareStatement(remove);
-            stat.execute();
-            JOptionPane.showMessageDialog(null, "Đã xóa nhân viên");
-            clearDeletedInfo();
-        }
-        catch (Exception e){
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra");
-        }
+        db.removeEmployee(manv);
+        JOptionPane.showMessageDialog(null, "Đã xóa nhân viên");
+        manvXoa.setText("");
+        clearDeletedInfo();
     }//GEN-LAST:event_removeBUTTONActionPerformed
 
     private String trimInnerSpaces(String str){
@@ -480,19 +537,53 @@ public class StaffManagePanel extends javax.swing.JFrame {
     }
     private void nvaddBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nvaddBTNActionPerformed
         // TODO add your handling code here:
-        String hoten = TENadd.getText().trim();
-        hoten = trimInnerSpaces(hoten);
-        String diachi = DIACHIadd.getText().trim();
-        diachi = trimInnerSpaces(diachi);
-        String sodt= SDTadd.getText().replaceAll(" ", "");
-        String tendn = TENDNadd.getText();
-        tendn = tendn.replaceAll(" ", "");
-        String matkhau = MKadd.getText();
-        if ((!hoten.equals("")) && (!diachi.equals("")) && (!sodt.equals("")) && (!tendn.equals("")) && (!matkhau.equals("")))
-            JOptionPane.showMessageDialog(null, hoten);
-        else
-            JOptionPane.showMessageDialog(null, hoten);
+        getNewInfo();
+        if ((emp.getEmployee_name().equals("")) || (emp.getEmployee_diachi().equals("")) || (emp.getEmployee_sdt().equals("")) || (emp.getEmployee_tendn().equals("")) || (emp.getEmployee_mk().equals("")))
+            JOptionPane.showMessageDialog(null, "Thiếu thông tin nhân viên");
+        else {
+            db.insertEmployee(emp);
+            clearAddedInfo();
+            JOptionPane.showMessageDialog(null, "Đã thêm nhân viên");
+        }
     }//GEN-LAST:event_nvaddBTNActionPerformed
+
+    private void manvEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manvEditActionPerformed
+        // TODO add your handling code here:
+        manv = manvEdit.getText();
+        DefaultTableModel editModel = (DefaultTableModel)editTable.getModel();
+        getEmployeeInfo();
+        editModel.setRowCount(0);
+        if (!emp.getEmployee_id().equals("null")){
+            editModel.addRow(new Object[]{emp.getEmployee_name(), emp.getEmployee_diachi(), emp.getEmployee_sdt(), emp.getEmployee_tendn(), emp.getEmployee_mk()});
+            changeBTN.setEnabled(true);
+        }
+        else changeBTN.setEnabled(false);
+        editTable.setModel((TableModel)editModel);
+    }//GEN-LAST:event_manvEditActionPerformed
+
+    private void changeBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeBTNActionPerformed
+        // TODO add your handling code here:
+        
+        DefaultTableModel editedModel = (DefaultTableModel)editTable.getModel();
+        Employee edited_emp = new Employee();
+        edited_emp.setEmployee_id(emp.getEmployee_id());
+        
+        edited_emp.setEmployee_name(editedModel.getValueAt(0, 0).toString());
+        edited_emp.setEmployee_diachi(editedModel.getValueAt(0, 1).toString());
+        edited_emp.setEmployee_sdt(editedModel.getValueAt(0, 2).toString());
+        edited_emp.setEmployee_tendn(editedModel.getValueAt(0, 3).toString());
+        edited_emp.setEmployee_mk(editedModel.getValueAt(0, 4).toString());
+        
+        int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn lưu thay đổi?", null, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (confirm == JOptionPane.YES_OPTION){
+            db.updateEmployee(edited_emp);
+            editedModel.setRowCount(0);
+            editTable.setModel((TableModel)editedModel);
+            manvEdit.setText("");
+            changeBTN.setEnabled(false);
+            JOptionPane.showMessageDialog(null, "Đã cập nhật thông tin");
+        }
+    }//GEN-LAST:event_changeBTNActionPerformed
 
     /**
      * @param args the command line arguments
@@ -524,7 +615,9 @@ public class StaffManagePanel extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StaffManagePanel().setVisible(true);
+                StaffManagePanel frame = new StaffManagePanel();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
             }
         });
     }
