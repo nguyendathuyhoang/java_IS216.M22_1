@@ -45,19 +45,19 @@ public class HomePage extends javax.swing.JFrame {
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-customer-50.png")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-customer-50.png"))); // NOI18N
         jLabel1.setText("Customer Information");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-room-64.png")); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-room-64.png"))); // NOI18N
         jLabel2.setText("Rooms");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel3.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-booking-50.png")); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-booking-50.png"))); // NOI18N
         jLabel3.setText("Booking Diary");
 
         foodlb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        foodlb.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-meal-50.png")); // NOI18N
+        foodlb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-meal-50.png"))); // NOI18N
         foodlb.setText("Food");
         foodlb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -66,7 +66,7 @@ public class HomePage extends javax.swing.JFrame {
         });
 
         drinklb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        drinklb.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-drink-64.png")); // NOI18N
+        drinklb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-drink-64.png"))); // NOI18N
         drinklb.setText("Drink");
         drinklb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -75,7 +75,7 @@ public class HomePage extends javax.swing.JFrame {
         });
 
         servicelb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        servicelb.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-spa-64.png")); // NOI18N
+        servicelb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-spa-64.png"))); // NOI18N
         servicelb.setText("Services");
         servicelb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -84,7 +84,7 @@ public class HomePage extends javax.swing.JFrame {
         });
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel7.setIcon(new javax.swing.ImageIcon("D:\\HK6\\LapTrinhJava\\Project\\Final_Proj\\JavaApplication14\\src\\Image\\icons8-login-50.png")); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-login-50.png"))); // NOI18N
         jLabel7.setText("Log in");
 
         jPanel2.setBackground(new java.awt.Color(102, 204, 255));
@@ -134,7 +134,7 @@ public class HomePage extends javax.swing.JFrame {
                 .addComponent(servicelb)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel7)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
