@@ -303,7 +303,7 @@ public class FoodPanel extends javax.swing.JFrame {
         // TODO add your handling code here:
         editfood.setEnabled(true);
         deletefood.setEnabled(true);
-        addfood.setEnabled(true);
+        addfood.setEnabled(false);
         
         int row = foodtb.getSelectedRow();
         displayToTextFields(row);
