@@ -10,7 +10,7 @@ package Class;
  * Lớp employee
  */
 public class Employee {
-    private String emp_id;
+    private int emp_id;
     // Mã nhân viên
     private String emp_name;
     // Họ tên nhân viên
@@ -23,11 +23,11 @@ public class Employee {
     private String emp_matkhau;
     // Mật khẩu
 
-    public String getEmployee_id() {
+    public int getEmployee_id() {
         return emp_id;
     }
 
-    public void setEmployee_id(String emp_id) {
+    public void setEmployee_id(int emp_id) {
         this.emp_id = emp_id;
     }
 
