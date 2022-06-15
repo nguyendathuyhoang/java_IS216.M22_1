@@ -11,7 +11,7 @@ package Class;
  * Lớp UserInfo
  */
 public class UserInfo {
-    private String user_id;
+    private int user_id;
     // Mã khách hàng
     private String user_name;
     // Tên khách hàng
@@ -22,11 +22,11 @@ public class UserInfo {
     private String user_address;
     // Địa chỉ khách hàng
 
-    public String getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(String user_id) {
+    public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
 

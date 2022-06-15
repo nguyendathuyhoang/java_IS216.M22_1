@@ -31,7 +31,7 @@ public class DataConnection {
             Class.forName(JDBC_DRIVER);
             
             //Thực hiện kết nối đến db
-            Connection conn = DriverManager.getConnection(DATABASE_LINK, "root", "root");
+            Connection conn = DriverManager.getConnection(DATABASE_LINK, "root", "123456789");
             System.out.println("Kết nối thành công");
             return conn;
             

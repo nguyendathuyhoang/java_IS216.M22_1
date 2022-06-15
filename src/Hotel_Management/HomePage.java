@@ -4,21 +4,63 @@
  */
 package Hotel_Management;
 
-import javax.swing.JFrame;
+import Class.*;
+import Database.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.sql.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
- * @author ADMIN
+ * @author Nguyễn Đạt Huy Hoàng
+ * Form trang chủ
  */
 public class HomePage extends javax.swing.JFrame {
 
     /**
-     * Creates new form HomePage1
+     * Creates new form HomePage
      */
-    public HomePage() {
-        initComponents();
+    Vector<String> customerList = new Vector();
+    DataOperation db = new DataOperation();
+    CustomerDb customerdb = new CustomerDb();
+    RoomDb roomdb = new RoomDb();
+    //Booking booking;
+    //BookingDb bookingdb = new BookingDb();
+    boolean existingCustomer = false;
+    UserInfo user;
+    ResultSet result;
+    
+    private void ComboRoomType()
+    {
+        try
+        {
+            ResultSet rs = roomdb.getRoomType();
+            
+             while(rs.next())
+            {   
+                //roomClass.add(rs.getString("loaiphong"));
+                comboType.addItem(rs.getString("loaiphong"));
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null,"Lỗi");
+        }
+         
     }
 
+    public HomePage() {
+        initComponents();
+        searchCustomerHelper(); // phương thức search user
+        AutoCompleteDecorator.decorate(cbUser); // tự động hiển thị toàn bộ thông tin liên quan
+        ComboRoomType(); // Combobox RoomType
+    }
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,13 +71,13 @@ public class HomePage extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        CustomInfolb = new javax.swing.JLabel();
+        roomlb = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         foodlb = new javax.swing.JLabel();
         drinklb = new javax.swing.JLabel();
         servicelb = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        logoutlb = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -57,27 +99,40 @@ public class HomePage extends javax.swing.JFrame {
         comboType = new javax.swing.JComboBox<>();
         checkinDay = new com.toedter.calendar.JDateChooser();
         checkoutDay = new com.toedter.calendar.JDateChooser();
-        customerRoom = new javax.swing.JTextField();
+        tf_room = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
+        roomList = new javax.swing.JList<>();
+        addRoomField = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        cbUser = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Home Page");
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 255));
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-customer-50.png"))); // NOI18N
-        jLabel1.setText("Customer Information");
+        CustomInfolb.setBackground(new java.awt.Color(255, 255, 255));
+        CustomInfolb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        CustomInfolb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-customer-50.png"))); // NOI18N
+        CustomInfolb.setText("Customer Information");
+        CustomInfolb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CustomInfolbMouseClicked(evt);
+            }
+        });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-room-64.png"))); // NOI18N
-        jLabel2.setText("Rooms");
+        roomlb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        roomlb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-room-64.png"))); // NOI18N
+        roomlb.setText("Rooms");
+        roomlb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                roomlbMouseClicked(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-booking-50.png"))); // NOI18N
@@ -110,9 +165,14 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-login-50.png"))); // NOI18N
-        jLabel7.setText("Log in");
+        logoutlb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        logoutlb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-login-50.png"))); // NOI18N
+        logoutlb.setText("Log out");
+        logoutlb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logoutlbMouseClicked(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(102, 204, 255));
 
@@ -143,7 +203,14 @@ public class HomePage extends javax.swing.JFrame {
         btSave.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btSave.setText("Save");
 
-        comboType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        customerId.setEditable(false);
+        customerId.setBackground(new java.awt.Color(209, 210, 212));
+
+        comboType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboTypeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -172,7 +239,7 @@ public class HomePage extends javax.swing.JFrame {
                     .addComponent(comboType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(checkinDay, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
                     .addComponent(checkoutDay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(customerRoom))
+                    .addComponent(tf_room))
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(115, 115, 115)
@@ -212,7 +279,7 @@ public class HomePage extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(customerRoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(tf_room, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(checkinDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -235,16 +302,16 @@ public class HomePage extends javax.swing.JFrame {
 
         jSeparator1.setBackground(new java.awt.Color(255, 51, 0));
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(roomList);
 
-        jButton1.setBackground(new java.awt.Color(255, 0, 0));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setText("Add rooms to Rooms field");
+        addRoomField.setBackground(new java.awt.Color(255, 0, 0));
+        addRoomField.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        addRoomField.setText("Add rooms to Rooms field");
+        addRoomField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addRoomFieldActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -253,7 +320,7 @@ public class HomePage extends javax.swing.JFrame {
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(64, 64, 64)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(addRoomField, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 57, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -274,8 +341,45 @@ public class HomePage extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(addRoomField)
                 .addContainerGap(94, Short.MAX_VALUE))
+        );
+
+        jPanel5.setBackground(new java.awt.Color(102, 153, 255));
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel16.setText("Search Users (Type and press Enter)");
+
+        cbUser.setEditable(true);
+        cbUser.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cbUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbUserActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(cbUser, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -285,20 +389,22 @@ public class HomePage extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(37, 37, 37)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -312,11 +418,11 @@ public class HomePage extends javax.swing.JFrame {
                     .addComponent(foodlb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(drinklb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(servicelb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(logoutlb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CustomInfolb, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(roomlb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -324,9 +430,9 @@ public class HomePage extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(42, 42, 42)
-                .addComponent(jLabel1)
+                .addComponent(CustomInfolb)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2)
+                .addComponent(roomlb)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
@@ -336,7 +442,7 @@ public class HomePage extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(servicelb)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel7)
+                .addComponent(logoutlb)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -356,27 +462,205 @@ public class HomePage extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+     /*
+    Search User Enter
+    */
+    private void searchCustomerHelper() {
+        final DefaultComboBoxModel model = new DefaultComboBoxModel(customerList);
+        cbUser.setModel(model);
 
+        JTextComponent editor = (JTextComponent) cbUser.getEditor().getEditorComponent();
+        editor.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent evt) {
+                //System.out.println((int)KeyEvent.VK_ACCEPT);
+                // .............. 1st part for searching a customer, user should hit enter if he finds a user. 
+                if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+                    String details = (String) cbUser.getSelectedItem();
+                    //System.out.println(details);
+                    if (!details.contains(",")) {
+                        JOptionPane.showMessageDialog(null, "Không tìm thấy user. Hãy thêm user mới!");
+                    } else {
+                        int customerId = Integer.parseInt(details.substring(details.lastIndexOf(",") + 1));
+                        // A if condition should be here, but not required as the last line has no chance of returning -1.
+
+                        System.out.println(".>> " + customerId);
+                        ResultSet userDB = db.searchAnUser(customerId);
+                        displayTextField(userDB);
+                        existingCustomer = true;
+
+                    }
+
+                }
+
+                //................. end of first part, start of 2nd part,  for suggesting saved customer data list
+                String value = "";
+                try {
+                    value = cbUser.getEditor().getItem().toString();
+                    //System.out.println(value +" <<<<<<<<<<<<<");
+
+                } catch (Exception ex) {
+                }
+                if (value.length() >= 2) {
+
+                    //System.out.println("working");
+                    userComboFill(db.searchUser(value));
+                }
+
+            }
+        });
+
+    }
+    
+    private void displayTextField(ResultSet rs) {
+        System.out.println("in");
+        try {
+            while (rs.next()) {
+
+                customerId.setText(rs.getInt("makh") + "");
+                customerName.setText(rs.getString("hoten"));
+                customerNum.setText(rs.getString("sodt"));
+                customerAddress.setText(rs.getString("diachi"));
+                customerMail.setText(rs.getString("email"));
+
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "err from displaying to board");
+        }
+    }
+
+    private void userComboFill(ResultSet result) {
+        customerList.clear();
+        try {
+            while (result.next()) {
+                //System.out.println(">>>>>> "+result.getString("name"));
+                customerList.add(result.getString("hoten") + ", " + result.getString("diachi") + "," + result.getString("makh"));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "userCombo fill error");
+        }
+
+    }
+
+    /*private void clearAllFields() {
+        cbUser.getEditor().setItem(null);
+        //combo_reservationType.setSelectedIndex(0);
+
+        customerAddress.setText("");
+        customerNum.setText("");
+        tf_customerId.setText("");
+        tf_guestNo.setText("");
+        customerName.setText("");
+        tf_rooms.setText("");
+        checkinDay.setDate(new Date());
+        checkoutDay.setDate(null);
+        existingCustomer = false;
+    }*/
+    
+    
+    /*
+    Food label click
+    */
     private void foodlbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foodlbMouseClicked
         // TODO add your handling code here:
         FoodPanel f = new FoodPanel();
         f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Khi tắt frame sau cùng thì frame trc đó vẫn giữ nguyên
     }//GEN-LAST:event_foodlbMouseClicked
 
+    /*
+    Drink label click
+    */
     private void drinklbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drinklbMouseClicked
         // TODO add your handling code here:
         DrinkPanel d = new DrinkPanel();
         d.setVisible(true);
-        d.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        d.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Khi tắt frame sau cùng thì frame trc đó vẫn giữ nguyên
     }//GEN-LAST:event_drinklbMouseClicked
-
+    
+    /*
+    Services label click
+    */
     private void servicelbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_servicelbMouseClicked
         // TODO add your handling code here:
         ServicesPanel s = new ServicesPanel();
         s.setVisible(true);
-        s.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        s.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Khi tắt frame sau cùng thì frame trc đó vẫn giữ nguyên
     }//GEN-LAST:event_servicelbMouseClicked
+    
+    /*
+    Customer Info label click
+    */
+    private void CustomInfolbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CustomInfolbMouseClicked
+        // TODO add your handling code here:
+        CustomerPanel c = new CustomerPanel();
+        c.setVisible(true);
+        c.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Khi tắt frame sau cùng thì frame trc đó vẫn giữ nguyên
+        
+    }//GEN-LAST:event_CustomInfolbMouseClicked
+    
+    /*
+    Log out label click
+    */
+    private void logoutlbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutlbMouseClicked
+        // TODO add your handling code here:
+        dispose(); // Tắt frame hiện tại
+        LoginPanel l = new LoginPanel();
+        l.setVisible(true);
+        //l.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);  
+    }//GEN-LAST:event_logoutlbMouseClicked
+
+    private void roomlbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_roomlbMouseClicked
+        // TODO add your handling code here:
+        RoomPanel r = new RoomPanel();
+        r.setVisible(true);
+        r.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+    }//GEN-LAST:event_roomlbMouseClicked
+
+    private void cbUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbUserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbUserActionPerformed
+
+    private void addRoomFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoomFieldActionPerformed
+        // TODO add your handling code here:
+        List<String> list = new ArrayList();
+        list = roomList.getSelectedValuesList();
+        if (!list.isEmpty()) {
+            String roomString = list.get(0);
+            for (int i = 1; i < list.size(); i++) {
+                roomString += "," + list.get(i);
+            }
+            tf_room.setText(roomString);
+        }
+    }//GEN-LAST:event_addRoomFieldActionPerformed
+
+    private void comboTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTypeActionPerformed
+        // TODO add your handling code here:
+        Vector<String> temp = new Vector<String>();
+
+        try
+        {   
+            String query = "select maphong from phong where available = 1 and loaiphong = '"
+                    +comboType.getSelectedItem().toString()+"'";
+            Connection conn = new DataConnection().Connect();
+            Statement stat = conn.createStatement();
+            ResultSet rs = stat.executeQuery(query);
+            DefaultListModel listModel = new DefaultListModel();
+            while(rs.next())
+            {
+                //temp.add(rs.getString("maphong"));
+                listModel.addElement(rs.getString("maphong"));
+            }
+            roomList.setModel(listModel);
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            System.out.println("Lỗi!");
+        }
+    }//GEN-LAST:event_comboTypeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -415,7 +699,10 @@ public class HomePage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel CustomInfolb;
+    private javax.swing.JButton addRoomField;
     private javax.swing.JButton btSave;
+    private javax.swing.JComboBox<String> cbUser;
     private com.toedter.calendar.JDateChooser checkinDay;
     private com.toedter.calendar.JDateChooser checkoutDay;
     private javax.swing.JComboBox<String> comboType;
@@ -424,32 +711,32 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JTextField customerMail;
     private javax.swing.JTextField customerName;
     private javax.swing.JTextField customerNum;
-    private javax.swing.JTextField customerRoom;
     private javax.swing.JLabel drinklb;
     private javax.swing.JLabel foodlb;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel logoutlb;
+    private javax.swing.JList<String> roomList;
+    private javax.swing.JLabel roomlb;
     private javax.swing.JLabel servicelb;
+    private javax.swing.JTextField tf_room;
     // End of variables declaration//GEN-END:variables
 }

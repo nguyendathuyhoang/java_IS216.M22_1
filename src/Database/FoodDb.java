@@ -22,7 +22,7 @@ public class FoodDb {
     {
         try
         {
-            String insertFood = "insert into doan(madoan,tendoan,giadoan) values ('"+food.getFood_id()+"','"+food.getFood_name()+"',"+food.getFood_price()+")";
+            String insertFood = "insert into doan(tendoan,giadoan) values ('"+food.getFood_name()+"',"+food.getFood_price()+")";
             stat =conn.prepareStatement(insertFood);
             stat.execute();
             JOptionPane.showMessageDialog(null, "Thêm thành công!");
@@ -75,7 +75,7 @@ public class FoodDb {
         }
     }
     
-    public void deleteFood(String foodId)
+    public void deleteFood(int foodId)
     {
         try
         {

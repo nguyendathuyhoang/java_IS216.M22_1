@@ -29,9 +29,15 @@ public class DrinkPanel extends javax.swing.JFrame {
     private void drinkCreation()
     {
         drink = new Drink(); // Tạo drink
-        drink.setDrink_id(drinkid.getText()); // Lấy mã drink từ textfield
+        //drink.setDrink_id(drinkid.getText()); // Lấy mã drink từ textfield
         drink.setDrink_name(drinkname.getText()); // Lấy tên drink từ textfield
         drink.setDrink_price(Integer.parseInt(drinkprice.getText())); // Lấy giá drink từ textfield
+        
+        try {
+            drink.setDrink_id(Integer.parseInt(drinkid.getText()));
+        } catch (Exception ex) {
+            drink.setDrink_id(-1);
+        }
     }
     
     private void populatedrinkTable()
@@ -114,6 +120,9 @@ public class DrinkPanel extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Price");
+
+        drinkid.setEditable(false);
+        drinkid.setBackground(new java.awt.Color(209, 210, 212));
 
         drinkadd.setBackground(new java.awt.Color(51, 255, 204));
         drinkadd.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -266,25 +275,32 @@ public class DrinkPanel extends javax.swing.JFrame {
         // TODO add your handling code here:
         drinkCreation();
         db.insertDrink(drink);
+        populatedrinkTable();
+        clearAllFields();
     }//GEN-LAST:event_drinkaddActionPerformed
 
     private void drinkeditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drinkeditActionPerformed
         // TODO add your handling code here:
         drinkCreation();
         db.updateDrink(drink);
+        populatedrinkTable();
+        clearAllFields();
     }//GEN-LAST:event_drinkeditActionPerformed
 
     private void drinkdeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drinkdeleteActionPerformed
         // TODO add your handling code here:
-        String drinkId = drinkid.getText();
+        //String drinkId = drinkid.getText();
+        int drinkId = Integer.parseInt(drinkid.getText());
         db.deleteDrink(drinkId);
+        populatedrinkTable();
+        clearAllFields();
     }//GEN-LAST:event_drinkdeleteActionPerformed
 
     private void drinktbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drinktbMouseClicked
         // TODO add your handling code here:
         drinkedit.setEnabled(true);
         drinkdelete.setEnabled(true);
-        drinkadd.setEnabled(true);
+        drinkadd.setEnabled(false);
         
         int row = drinktb.getSelectedRow();
         displayToTextFields(row);
