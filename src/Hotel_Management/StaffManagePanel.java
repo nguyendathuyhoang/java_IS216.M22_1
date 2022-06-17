@@ -24,7 +24,7 @@ public class StaffManagePanel extends javax.swing.JFrame {
     Connection conn = DataConnection.Connect();
     PreparedStatement stat = null;
     ResultSet rs = null;
-    String manv;
+    int manv;
     Employee emp;
     StaffDb db = new StaffDb();
     /**
@@ -239,10 +239,10 @@ public class StaffManagePanel extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(97, 97, 97)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(89, 89, 89)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(manvEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(manvEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(25, Short.MAX_VALUE)
@@ -343,20 +343,17 @@ public class StaffManagePanel extends javax.swing.JFrame {
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(TENDNremove)
+                        .addComponent(DIACHIremove)
+                        .addComponent(SDTremove, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+                        .addComponent(MKremove)
+                        .addComponent(TENremove, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(manvXoa, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(removeBUTTON, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(MKremove, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(TENDNremove))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(TENremove, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(manvXoa, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(DIACHIremove)
-                                .addComponent(SDTremove, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(69, 69, 69))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 197, Short.MAX_VALUE)))
+                .addGap(69, 69, 69))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -438,15 +435,8 @@ public class StaffManagePanel extends javax.swing.JFrame {
         }
     }
     
-    private String generateId(){
-        Random r = new Random(System.currentTimeMillis());
-        int int_id = ((1 + r.nextInt(2)) * 10000 + r.nextInt(10000));
-        return String.valueOf(int_id);
-    }
-    
     private void getNewInfo(){
         emp = new Employee();
-        emp.setEmployee_id(generateId());
         String hoten = TENadd.getText().trim();
         hoten = trimInnerSpaces(hoten);
         emp.setEmployee_name(hoten);
@@ -482,10 +472,10 @@ public class StaffManagePanel extends javax.swing.JFrame {
     
     private void manvXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manvXoaActionPerformed
         // TODO add your handling code here:
-        manv = manvXoa.getText();
+        manv = Integer.parseInt(manvXoa.getText());
         try {
-            if (!manv.equals("00000")) {
-                String query = "select * from nhanvien where manv = '" + manv + "'";
+            if (manv != 0) {
+                String query = "select * from nhanvien where manv = " + manv;
                 stat = conn.prepareStatement(query);
                 rs = stat.executeQuery();
                 if (rs.next()){
@@ -498,10 +488,14 @@ public class StaffManagePanel extends javax.swing.JFrame {
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Không tìm thấy nhân viên");
+                    clearDeletedInfo();
+                    manvXoa.setText("");
                 }
             }
             else {
                 JOptionPane.showMessageDialog(null, "Không thể xóa quản trị viên");
+                clearDeletedInfo();
+                manvXoa.setText("");
             }
         }
         catch (Exception e) {
@@ -549,15 +543,21 @@ public class StaffManagePanel extends javax.swing.JFrame {
 
     private void manvEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manvEditActionPerformed
         // TODO add your handling code here:
-        manv = manvEdit.getText();
+        manv = Integer.parseInt(manvEdit.getText());
         DefaultTableModel editModel = (DefaultTableModel)editTable.getModel();
         getEmployeeInfo();
         editModel.setRowCount(0);
-        if (!emp.getEmployee_id().equals("null")){
+        if (emp.getEmployee_id() > 0){
             editModel.addRow(new Object[]{emp.getEmployee_name(), emp.getEmployee_diachi(), emp.getEmployee_sdt(), emp.getEmployee_tendn(), emp.getEmployee_mk()});
             changeBTN.setEnabled(true);
         }
-        else changeBTN.setEnabled(false);
+        else if (emp.getEmployee_id() == 0){
+            JOptionPane.showMessageDialog(null, "Không thể chỉnh sửa thông tin quản trị viên");
+            changeBTN.setEnabled(false);
+        }
+        else {
+            changeBTN.setEnabled(false);
+        }
         editTable.setModel((TableModel)editModel);
     }//GEN-LAST:event_manvEditActionPerformed
 

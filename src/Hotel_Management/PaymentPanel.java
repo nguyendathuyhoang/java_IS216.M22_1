@@ -4,13 +4,20 @@
  */
 package Hotel_Management;
 
+import Database.DataConnection;
+import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-import java.awt.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,6 +26,12 @@ import java.awt.*;
 public class PaymentPanel extends javax.swing.JFrame {
     Pattern gmail = Pattern.compile("@gmail.com$", Pattern.CASE_INSENSITIVE);
     String sdt = "\\d+";
+    ArrayList<Integer> mahoadon = new ArrayList<Integer>();
+    int makhachhang = 0;
+    
+    Connection conn = DataConnection.Connect();
+    PreparedStatement stat = null;
+    ResultSet rs = null;
     /**
      * Creates new form PaymentPanel
      */
@@ -45,8 +58,11 @@ public class PaymentPanel extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         thanhtoanBTN = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        checkoutTien = new javax.swing.JTextField();
         hoadonBTN = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        tienPhong = new javax.swing.JLabel();
+        tongCong = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,26 +82,41 @@ public class PaymentPanel extends javax.swing.JFrame {
 
             },
             new String [] {
-
+                "Tên sàn phẩm, dịch vụ", "Số lượng", "Thành tiền"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(hoadonTable);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Trajan Pro", 1, 36)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("CHECKOUT");
+        jLabel3.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         thanhtoanBTN.setText("Thanh toán");
         thanhtoanBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        jLabel4.setText("Tổng tiền:");
-
-        checkoutTien.setEnabled(false);
-        checkoutTien.addActionListener(new java.awt.event.ActionListener() {
+        thanhtoanBTN.setEnabled(false);
+        thanhtoanBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkoutTienActionPerformed(evt);
+                thanhtoanBTNActionPerformed(evt);
             }
         });
+
+        jLabel4.setText("Tổng tiền:");
 
         hoadonBTN.setText("Tạo hóa đơn");
         hoadonBTN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -95,38 +126,56 @@ public class PaymentPanel extends javax.swing.JFrame {
             }
         });
 
+        jLabel5.setText("Tiền phòng:");
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setText("Các dịch vụ, sản phẩm đã sử dụng:");
+
+        tienPhong.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        tongCong.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkoutTien)
-                        .addGap(129, 129, 129)
-                        .addComponent(thanhtoanBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(checkoutEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
-                            .addComponent(checkoutSDT))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(hoadonBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(38, 38, 38))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(checkoutEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                                    .addComponent(checkoutSDT))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(hoadonBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tienPhong, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tongCong, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(thanhtoanBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(38, 38, 38))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -137,15 +186,22 @@ public class PaymentPanel extends javax.swing.JFrame {
                             .addComponent(checkoutSDT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(hoadonBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(thanhtoanBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(checkoutTien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tienPhong, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tongCong, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(thanhtoanBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -174,31 +230,152 @@ public class PaymentPanel extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_checkoutSDTActionPerformed
 
-    private void checkoutTienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkoutTienActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_checkoutTienActionPerformed
+    private void loadChiTietHoaDon(){
+        try {
+            java.util.Date ngayDen = new java.util.Date();
+            java.util.Date ngayDi = new java.util.Date();
+            java.util.Date Today = new java.util.Date();
+            int giaPhong = 0;
+            int tongTien = 0;
+            
+            String query = "select makh from khachhang where email = ? and sodt = ?;";
+            stat = conn.prepareStatement(query);
+            stat.setString(1, checkoutEmail.getText());
+            stat.setString(2, checkoutSDT.getText());
+            rs = stat.executeQuery();
+            
+            if (rs.next()){
+                makhachhang = rs.getInt("makh");
+                query = "select * from datphong dp join phong p on dp.maphong = p.maphong where makh = ?";
+                stat = conn.prepareStatement(query);
+                stat.setInt(1, makhachhang);
+                rs = stat.executeQuery();
+                if (rs.next()){
+                    ngayDen = new java.util.Date(rs.getDate("NGDEN").getTime());
+                    ngayDi = new java.util.Date(rs.getDate("NGDI").getTime());
+                    giaPhong = rs.getInt("GIAPHONG");
+                    query = "select mahd, ngayhd from hoadon where makh = ?;";
+                    stat = conn.prepareStatement(query);
+                    stat.setString(1, String.valueOf(makhachhang));
+                    ResultSet rs2 = stat.executeQuery();
 
+                    while (rs2.next()) {
+                        java.util.Date ngayhoadon = new java.util.Date(rs2.getDate("ngayhd").getTime());
+                        if (!ngayDen.after(ngayhoadon) && !ngayDi.before(ngayhoadon))
+                            mahoadon.add(rs2.getInt("mahd"));
+                    }
+                    DefaultTableModel cthd_model = (DefaultTableModel) hoadonTable.getModel();
+                    cthd_model.setRowCount(0);
+                    String query3 = null;
+                    PreparedStatement PS3 = null;
+                    ResultSet rs3 = null;
+                    for (int i = 0; i < mahoadon.size(); i++) {
+                        query3 = "SELECT MAHD, CT.MADOAN, TENDOAN, GIADOAN, COUNT(CT.MADOAN) AS SOLUONG FROM CTHOADON AS CT JOIN DOAN AS DA ON CT.MADOAN = DA.MADOAN WHERE MAHD = ? GROUP BY CT.MADOAN;";
+                        PS3 = conn.prepareStatement(query3);
+                        PS3.setInt(1, mahoadon.get(i));
+                        rs3 = PS3.executeQuery();
+                        while (rs3.next()) {
+                            cthd_model.addRow(new Object[] {rs3.getString("TENDOAN"), rs3.getInt("SOLUONG"), rs3.getInt("GIADOAN")*rs3.getInt("SOLUONG")});
+                        }
+
+                        query3 = "SELECT MAHD, CT.MATU, TENTU, GIATU, COUNT(CT.MATU) SOLUONG FROM CTHOADON CT JOIN THUCUONG T ON CT.MATU = T.MATU WHERE MAHD = ? GROUP BY CT.MATU;";
+                        PS3 = conn.prepareStatement(query3);
+                        PS3.setInt(1, mahoadon.get(i));
+                        rs3 = PS3.executeQuery();
+                        while (rs3.next()) {
+                            cthd_model.addRow(new Object[] {rs3.getString("TENTU"), rs3.getInt("SOLUONG"), rs3.getInt("GIATU")*rs3.getInt("SOLUONG")});
+                        }
+
+                        query3 = "SELECT MAHD, CT.MADV, TENDV, GIADV, COUNT(CT.MADV) SOLUONG FROM CTHOADON CT JOIN DICHVU DV ON CT.MADV = DV.MADV WHERE MAHD = ? GROUP BY CT.MADV;";
+                        PS3 = conn.prepareStatement(query3);
+                        PS3.setInt(1, mahoadon.get(i));
+                        rs3 = PS3.executeQuery();
+                        while (rs3.next()) {
+                            cthd_model.addRow(new Object[] {rs3.getString("TENDV"), rs3.getInt("SOLUONG"), rs3.getInt("GIADV")*rs3.getInt("SOLUONG")});
+                        }
+                    }
+                    hoadonTable.setModel(cthd_model);
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                    LocalDate dateDen = LocalDate.parse(df.format(ngayDen), DateTimeFormatter.ISO_LOCAL_DATE);
+                    LocalDate dateDi = null;
+                    if (ngayDi.after(Today)){
+                        dateDi = LocalDate.parse(df.format(Today), DateTimeFormatter.ISO_LOCAL_DATE);
+                    }
+                    else dateDi = LocalDate.parse(df.format(ngayDi), DateTimeFormatter.ISO_LOCAL_DATE);
+                    Duration diff = Duration.between(dateDen.atStartOfDay(), dateDi.atStartOfDay());
+                    long diffDays = diff.toDays();
+                    giaPhong = (int)diffDays * giaPhong;
+                    tienPhong.setText(String.valueOf(giaPhong) + " VNĐ");
+
+                    for (int i=0; i<hoadonTable.getRowCount(); i++){
+                        tongTien = tongTien + Integer.parseInt(hoadonTable.getValueAt(i, 2).toString());
+                    }
+                    tongTien = tongTien + giaPhong;
+                    tongCong.setText(String.valueOf(tongTien) + " VNĐ");
+                    thanhtoanBTN.setEnabled(true);
+                }
+                else JOptionPane.showMessageDialog(null, "Không thể tạo hóa đơn\nKhách hàng chưa đặt phòng");
+            }
+            else JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng");
+        }
+        catch (Exception e){
+            System.out.print(e);
+            JOptionPane.showMessageDialog(null, "Lỗi");
+        }
+        
+    }
+    
+    private void clearForm(){
+        thanhtoanBTN.setEnabled(false);
+        DefaultTableModel dtm = (DefaultTableModel) hoadonTable.getModel();
+        dtm.setRowCount(0);
+        hoadonTable.setModel(dtm);
+        tienPhong.setText("");
+        tongCong.setText("");
+    }
+    
     private void hoadonBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hoadonBTNActionPerformed
         // TODO add your handling code here:
         if (((checkoutEmail.getText().trim()).equals("")) || ((checkoutSDT.getText().trim()).equals(""))){
             JOptionPane.showMessageDialog(null,"Thông tin còn thiếu");
+            clearForm();
         }
         else if (!gmail.matcher(checkoutEmail.getText()).find()){
             JOptionPane.showMessageDialog(null,"E-mail không đúng định dạng");
+            clearForm();
         }
         else if (checkoutEmail.getText().length() < 14) {
             JOptionPane.showMessageDialog(null,"E-mail không đúng định dạng");
+            clearForm();
         }
         else if (!checkoutSDT.getText().matches(sdt)){
             JOptionPane.showMessageDialog(null,"Số điện thoại không đúng định dạng");
+            clearForm();
         }
-        else if (checkoutSDT.getText().length() < 10) {
+        else if (checkoutSDT.getText().length() < 5) {
             JOptionPane.showMessageDialog(null,"Số điện thoại không đúng định dạng");
+            clearForm();
         }
         else {
-            JOptionPane.showMessageDialog(null,"Load các giao dịch");
+            loadChiTietHoaDon();
         }
     }//GEN-LAST:event_hoadonBTNActionPerformed
+
+    private void thanhtoanBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thanhtoanBTNActionPerformed
+        // TODO add your handling code here:
+        clearForm();
+        String query = "delete from datphong where makh = ?";
+        try {
+            stat = conn.prepareStatement(query);
+            stat.setInt(1, makhachhang);
+            stat.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Đã thanh toán hóa đơn");
+        }
+        catch (Exception e){
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Lỗi");
+        }
+    }//GEN-LAST:event_thanhtoanBTNActionPerformed
 
     /**
      * @param args the command line arguments
@@ -238,14 +415,17 @@ public class PaymentPanel extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField checkoutEmail;
     private javax.swing.JTextField checkoutSDT;
-    private javax.swing.JTextField checkoutTien;
     private javax.swing.JButton hoadonBTN;
     private javax.swing.JTable hoadonTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton thanhtoanBTN;
+    private javax.swing.JLabel tienPhong;
+    private javax.swing.JLabel tongCong;
     // End of variables declaration//GEN-END:variables
 }

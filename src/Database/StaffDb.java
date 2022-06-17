@@ -20,7 +20,7 @@ public class StaffDb {
     {
         try 
         {
-            String update = "insert into nhanvien values ('" +emp.getEmployee_id()+ "', '" +emp.getEmployee_name() + "', '" +emp.getEmployee_diachi()+ "', '" +emp.getEmployee_sdt()+ "', '" +emp.getEmployee_tendn()+ "', '" + emp.getEmployee_mk()+ "');";
+            String update = "insert into nhanvien (hoten, diachi, sodt, tendn, matkhau) values ('" +emp.getEmployee_name() + "', '" +emp.getEmployee_diachi()+ "', '" +emp.getEmployee_sdt()+ "', '" +emp.getEmployee_tendn()+ "', '" + emp.getEmployee_mk()+ "');";
             stat = conn.prepareStatement(update);
             stat.executeUpdate();
         }
@@ -36,7 +36,7 @@ public class StaffDb {
     
     public void updateEmployee(Employee emp){
         try {
-            String update = "update nhanvien set hoten = '" +emp.getEmployee_name()+ "', diachi = '" +emp.getEmployee_diachi()+ "', sodt = '" +emp.getEmployee_sdt()+ "', tendn = '" +emp.getEmployee_tendn()+ "', matkhau = '" +emp.getEmployee_mk()+ "'where manv = '" +emp.getEmployee_id()+ "';";
+            String update = "update nhanvien set hoten = '" +emp.getEmployee_name()+ "', diachi = '" +emp.getEmployee_diachi()+ "', sodt = '" +emp.getEmployee_sdt()+ "', tendn = '" +emp.getEmployee_tendn()+ "', matkhau = '" +emp.getEmployee_mk()+ "'where manv = " +emp.getEmployee_id()+ ";";
             stat = conn.prepareStatement(update);
             stat.executeUpdate();
         }
@@ -50,14 +50,14 @@ public class StaffDb {
         }
     }
     
-    public Employee getEmployee(String manv){
+    public Employee getEmployee(int manv){
         Employee emp = new Employee();
         try{
-            String remove = "select * from nhanvien where manv = '" +manv+ "';";
+            String remove = "select * from nhanvien where manv = " +manv;
             stat = conn.prepareStatement(remove);
             rs = stat.executeQuery();
             if (rs.next()){
-                emp.setEmployee_id(rs.getString("manv"));
+                emp.setEmployee_id(rs.getInt("manv"));
                 emp.setEmployee_name(rs.getString("hoten"));
                 emp.setEmployee_diachi(rs.getString("diachi"));
                 emp.setEmployee_sdt(rs.getString("sodt"));
@@ -65,7 +65,7 @@ public class StaffDb {
                 emp.setEmployee_mk(rs.getString("matkhau"));
             }
             else {
-                emp.setEmployee_id("null");
+                emp.setEmployee_id(-1);
                 JOptionPane.showMessageDialog(null, "Không tìm thấy nhân viên.");
             }
         }
@@ -79,9 +79,9 @@ public class StaffDb {
         return emp;
     }
     
-    public void removeEmployee(String manv){
+    public void removeEmployee(int manv){
         try{
-            String remove = "delete from nhanvien where manv = '" + manv + "'";
+            String remove = "delete from nhanvien where manv = " + manv;
             stat = conn.prepareStatement(remove);
             stat.execute();
         }
