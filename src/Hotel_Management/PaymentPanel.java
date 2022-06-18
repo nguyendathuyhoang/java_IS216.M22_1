@@ -5,6 +5,7 @@
 package Hotel_Management;
 
 import Database.DataConnection;
+import com.lowagie.text.pdf.PdfWriter;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,10 +15,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import java.util.regex.Pattern;
+import javax.swing.JFileChooser;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import javax.swing.table.DefaultTableModel;
+import com.lowagie.text.Document;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPTable;
+import java.io.FileOutputStream;
 
 /**
  *
@@ -264,8 +270,7 @@ public class PaymentPanel extends javax.swing.JFrame {
                         if (!ngayDen.after(ngayhoadon) && !ngayDi.before(ngayhoadon))
                             mahoadon.add(rs2.getInt("mahd"));
                     }
-                    DefaultTableModel cthd_model = (DefaultTableModel) hoadonTable.getModel();
-                    cthd_model.setRowCount(0);
+                    DefaultTableModel cthd_model = new DefaultTableModel(null, new String[]{"Tên sản phẩm dịch vụ", "Số lượng", "Thành tiền"});
                     String query3 = null;
                     PreparedStatement PS3 = null;
                     ResultSet rs3 = null;
@@ -304,7 +309,7 @@ public class PaymentPanel extends javax.swing.JFrame {
                     else dateDi = LocalDate.parse(df.format(ngayDi), DateTimeFormatter.ISO_LOCAL_DATE);
                     Duration diff = Duration.between(dateDen.atStartOfDay(), dateDi.atStartOfDay());
                     long diffDays = diff.toDays();
-                    giaPhong = (int)diffDays * giaPhong;
+                    giaPhong = ((int)diffDays + 1) * giaPhong;
                     tienPhong.setText(String.valueOf(giaPhong) + " VNĐ");
 
                     for (int i=0; i<hoadonTable.getRowCount(); i++){
@@ -328,7 +333,10 @@ public class PaymentPanel extends javax.swing.JFrame {
     private void clearForm(){
         thanhtoanBTN.setEnabled(false);
         DefaultTableModel dtm = (DefaultTableModel) hoadonTable.getModel();
-        dtm.setRowCount(0);
+        int nrow = dtm.getRowCount();
+        for (int i = nrow - 1; i>=0; i--){
+            dtm.removeRow(i);
+        }
         hoadonTable.setModel(dtm);
         tienPhong.setText("");
         tongCong.setText("");
@@ -357,24 +365,58 @@ public class PaymentPanel extends javax.swing.JFrame {
             clearForm();
         }
         else {
+            clearForm();
             loadChiTietHoaDon();
         }
     }//GEN-LAST:event_hoadonBTNActionPerformed
 
     private void thanhtoanBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thanhtoanBTNActionPerformed
         // TODO add your handling code here:
-        clearForm();
         String query = "delete from datphong where makh = ?";
+        
+        String path = "";
+        JFileChooser j = new JFileChooser();
+        j.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int x = j.showSaveDialog(this);
+        
+        if (x == JFileChooser.APPROVE_OPTION){
+            path = j.getSelectedFile().getPath();
+        }
+        
+        Document doc = new Document();
         try {
+            PdfWriter.getInstance(doc, new FileOutputStream(path + "/hoadon.pdf"));
+            doc.open();
+            doc.add(new Paragraph("RECEIPT"));
+            PdfPTable tbl = new PdfPTable(3);
+            tbl.setSpacingBefore(11f);
+            tbl.setSpacingAfter(11f);
+            tbl.addCell("Product (service) names");
+            tbl.addCell("Amount");
+            tbl.addCell("Cash");
+            
+            for (int i = 0; i < hoadonTable.getRowCount(); i++){
+                String name = hoadonTable.getModel().getValueAt(i, 0).toString();
+                String soluong = hoadonTable.getModel().getValueAt(i, 1).toString();
+                String thanhtien = hoadonTable.getModel().getValueAt(i, 2).toString();
+                
+                tbl.addCell(name);
+                tbl.addCell(soluong);
+                tbl.addCell(thanhtien);
+            }
+            doc.add(tbl);
+            
             stat = conn.prepareStatement(query);
             stat.setInt(1, makhachhang);
-            stat.executeUpdate();
+            //stat.executeUpdate();
             JOptionPane.showMessageDialog(null, "Đã thanh toán hóa đơn");
         }
         catch (Exception e){
             System.out.println(e);
             JOptionPane.showMessageDialog(null, "Lỗi");
         }
+        doc.close();
+        clearForm();
     }//GEN-LAST:event_thanhtoanBTNActionPerformed
 
     /**
