@@ -22,7 +22,7 @@ public class DrinkDb {
     {
         try
         {
-            String insertDrink = "insert into thucuong(mathucuong,tenthucuong,giathucuong) values ('"+drink.getDrink_id()+"','"+drink.getDrink_name()+"',"+drink.getDrink_price()+")";
+            String insertDrink = "insert into thucuong(tentu,giatu) values ('"+drink.getDrink_name()+"',"+drink.getDrink_price()+")";
             stat =conn.prepareStatement(insertDrink);
             stat.execute();
             JOptionPane.showMessageDialog(null, "Thêm thành công!");
@@ -58,7 +58,7 @@ public class DrinkDb {
     {
         try
         {
-            String updateDrink = "update thucuong set tenthucuong = '" + drink.getDrink_name()+"', giathucuong = "+drink.getDrink_price()+" where mathucuong ='"
+            String updateDrink = "update thucuong set tentu = '" + drink.getDrink_name()+"', giatu = "+drink.getDrink_price()+" where matu ='"
                     + drink.getDrink_id()+"'";
             stat = conn.prepareStatement(updateDrink);
             stat.execute();
@@ -75,11 +75,11 @@ public class DrinkDb {
         }
     }
     
-    public void deleteDrink(String drinkId)
+    public void deleteDrink(int drinkId)
     {
         try
         {
-            String deleteDrink = "delete from thucuong where mathucuong = '"+drinkId+"'";
+            String deleteDrink = "delete from thucuong where matu = '"+drinkId+"'";
             stat = conn.prepareStatement(deleteDrink);
             stat.execute();
             JOptionPane.showMessageDialog(null, "Xóa thành công!!!");

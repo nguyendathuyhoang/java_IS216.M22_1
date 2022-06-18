@@ -34,9 +34,14 @@ public class FoodPanel extends javax.swing.JFrame {
     private void foodCreation()
     {
         food = new Food(); // Tạo food
-        food.setFood_id(foodid.getText()); // Lấy mã food từ textfield
+        //food.setFood_id(foodid.getText()); // Lấy mã food từ textfield
         food.setFood_name(foodname.getText()); // Lấy tên food từ textfield
         food.setFood_price(Integer.parseInt(foodprice.getText())); // Lấy giá food từ textfield
+        try {
+            food.setFood_id(Integer.parseInt(foodid.getText()));
+        } catch (Exception ex) {
+            food.setFood_id(-1);
+        }
     }
     
     private void populateFoodTable()
@@ -121,6 +126,9 @@ public class FoodPanel extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Price");
+
+        foodid.setEditable(false);
+        foodid.setBackground(new java.awt.Color(209, 210, 212));
 
         foodprice.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -285,18 +293,25 @@ public class FoodPanel extends javax.swing.JFrame {
         // TODO add your handling code here:
         foodCreation();
         db.updateFood(food);
+        populateFoodTable();
+        clearAllFields();
     }//GEN-LAST:event_editfoodActionPerformed
 
     private void addfoodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addfoodActionPerformed
         // TODO add your handling code here:
         foodCreation();
         db.insertFood(food);
+        populateFoodTable();
+        clearAllFields();
     }//GEN-LAST:event_addfoodActionPerformed
 
     private void deletefoodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletefoodActionPerformed
         // TODO add your handling code here:
-        String foodId = foodid.getText();
+        //String foodId = foodid.getText();
+        int foodId = Integer.parseInt(foodid.getText());
         db.deleteFood(foodId);
+        populateFoodTable();
+        clearAllFields();
     }//GEN-LAST:event_deletefoodActionPerformed
 
     private void foodtbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foodtbMouseClicked

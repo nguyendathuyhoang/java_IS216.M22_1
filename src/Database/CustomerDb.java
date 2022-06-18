@@ -25,8 +25,8 @@ public class CustomerDb {
       public void insertCustomer(UserInfo user)  {
         try {
             String insertQuery = "insert into khachhang"
-                    + "(makh,hoten,diachi,sodt,email)"
-                    + " values('" + user.getUser_id() + "','"
+                    + "(hoten,diachi,sodt,email)"
+                    + " values('"
                     + user.getUser_name()
                     + "','" + user.getUser_address() + "'"
                     + ",'" + user.getUser_phone() + "'"
@@ -80,7 +80,7 @@ public class CustomerDb {
 
     }
 
-    public void deleteCustomer(String userId) throws SQLException {
+    public void deleteCustomer(int userId) throws SQLException {
         try {
             String deleteQuery = "delete from khachhang where makh ='" + userId + "'";
             statement = conn.prepareStatement(deleteQuery);

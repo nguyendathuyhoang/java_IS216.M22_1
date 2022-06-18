@@ -10,18 +10,18 @@ package Class;
  * Lớp Food
  */
 public class Food {
-    private String food_id;
+    private int food_id;
     // Mã món ăn
     private String food_name;
     // Tên món ăn
     private int food_price;
     // Giá món ăn
 
-    public String getFood_id() {
+    public int getFood_id() {
         return food_id;
     }
 
-    public void setFood_id(String food_id) {
+    public void setFood_id(int food_id) {
         this.food_id = food_id;
     }
 

@@ -37,9 +37,15 @@ public class ServicesPanel extends javax.swing.JFrame {
     private void serviceCreation()
     {
         service = new Service(); // Tạo service
-        service.setService_id(serviceid.getText()); // Lấy mã service từ textfield
+        //service.setService_id(serviceid.getText()); // Lấy mã service từ textfield
         service.setService_name(servicename.getText()); // Lấy tên service từ textfield
         service.setService_price(Integer.parseInt(serviceprice.getText())); // Lấy giá service từ textfield
+        
+        try {
+            service.setService_id(Integer.parseInt(serviceid.getText()));
+        } catch (Exception ex) {
+            service.setService_id(-1);
+        }
     }
     
     private void populateserviceTable()
@@ -117,6 +123,9 @@ public class ServicesPanel extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Price");
+
+        serviceid.setEditable(false);
+        serviceid.setBackground(new java.awt.Color(209, 210, 212));
 
         serviceprice.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -278,25 +287,32 @@ public class ServicesPanel extends javax.swing.JFrame {
         // TODO add your handling code here:
         serviceCreation();
         db.insertService(service);
+        populateserviceTable();
+        clearAllFields();
     }//GEN-LAST:event_addserviceActionPerformed
 
     private void editserviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editserviceActionPerformed
         // TODO add your handling code here:
         serviceCreation();
         db.updateService(service);
+        populateserviceTable();
+        clearAllFields();
     }//GEN-LAST:event_editserviceActionPerformed
 
     private void deleteserviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteserviceActionPerformed
         // TODO add your handling code here:
-        String serviceId = serviceid.getText();
+        // String serviceId = serviceid.getText();
+        int serviceId = Integer.parseInt(serviceid.getText());
         db.deleteService(serviceId);
+        populateserviceTable();
+        clearAllFields();
     }//GEN-LAST:event_deleteserviceActionPerformed
 
     private void servicetbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_servicetbMouseClicked
         // TODO add your handling code here:
         editservice.setEnabled(true);
         deleteservice.setEnabled(true);
-        addservice.setEnabled(true);
+        addservice.setEnabled(false);
         
         int row = servicetb.getSelectedRow();
         displayToTextFields(row);

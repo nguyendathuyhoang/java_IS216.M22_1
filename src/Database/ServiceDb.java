@@ -22,7 +22,7 @@ public class ServiceDb {
     {
         try
         {
-            String insertService = "insert into dichvu(madv,tendv,giadv) values ('"+service.getService_id()+"','"+service.getService_name()+"',"+service.getService_price()+")";
+            String insertService = "insert into dichvu(tendv,giadv) values ('"+service.getService_name()+"',"+service.getService_price()+")";
             stat =conn.prepareStatement(insertService);
             stat.execute();
             JOptionPane.showMessageDialog(null, "Thêm thành công!");
@@ -75,7 +75,7 @@ public class ServiceDb {
         }
     }
     
-    public void deleteService(String serviceId)
+    public void deleteService(int serviceId)
     {
         try
         {

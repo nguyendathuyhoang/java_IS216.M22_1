@@ -10,18 +10,18 @@ package Class;
  * Lớp service
  */
 public class Service {
-    private String service_id;
+    private int service_id;
     // Mã dịch vụ khách sạn
     private String service_name;
     // Tên dịch vụ khách sạn
     private int service_price;
     // Giá dịch vụ khách sạn
 
-    public String getService_id() {
+    public int getService_id() {
         return service_id;
     }
 
-    public void setService_id(String service_id) {
+    public void setService_id(int service_id) {
         this.service_id = service_id;
     }
 

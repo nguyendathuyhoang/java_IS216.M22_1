@@ -23,6 +23,7 @@ import net.proteanit.sql.DbUtils;
 /**
  *
  * @author Nguyễn Đạt Huy Hoàng
+ * Form quản lý khách hàng
  */
 public class CustomerPanel extends javax.swing.JFrame {
 
@@ -50,11 +51,19 @@ public class CustomerPanel extends javax.swing.JFrame {
     {
         user = new UserInfo(); // Tạo đối tượng khách hàng
         
-        user.setUser_id(customerId.getText()); // Lấy mã khách hàng từ textfield
+        //user.setUser_id(customerId.getText()); // Lấy mã khách hàng từ textfield
         user.setUser_name(customerName.getText()); // Lấy tên khách hàng từ textfield
         user.setUser_address(customerAdd.getText()); // Lấy địa chỉ khách hàng từ textfield
         user.setUser_phone(customerPhone.getText()); // Lấy sđt khách hàng từ textfield
         user.setUser_email(customerMail.getText()); // Lấy email khách hàng từ textfield
+        
+         try{
+            user.setUser_id(Integer.parseInt(customerId.getText()));
+        }
+        catch(Exception ex)
+        {
+            user.setUser_id(0);
+        }
         
         
     }
@@ -78,7 +87,7 @@ public class CustomerPanel extends javax.swing.JFrame {
     private void displayToTextField(int row)
     {
         //System.out.println(customertb.getModel().getValueAt(row, 0)+ " >>>>>>>>> ");
-        customerId.setText((String) customertb.getModel().getValueAt(row, 0));
+        customerId.setText(customertb.getModel().getValueAt(row, 0)+"");
         customerName.setText((String) customertb.getModel().getValueAt(row, 1));
         customerAdd.setText((String) customertb.getModel().getValueAt(row, 2));
         customerPhone.setText((String) customertb.getModel().getValueAt(row, 3));
@@ -117,19 +126,30 @@ public class CustomerPanel extends javax.swing.JFrame {
         jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Customer Infomation");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Customer Info", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 14))); // NOI18N
+        jPanel2.setBackground(new java.awt.Color(204, 204, 255));
 
+        jPanel1.setBackground(new java.awt.Color(153, 153, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Customer Info", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 18))); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Name");
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Address");
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Phone No");
 
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Email");
 
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("ID");
 
+        addCustomer.setBackground(new java.awt.Color(51, 255, 204));
+        addCustomer.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         addCustomer.setText("Add");
         addCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,6 +157,8 @@ public class CustomerPanel extends javax.swing.JFrame {
             }
         });
 
+        editCustomer.setBackground(new java.awt.Color(0, 255, 153));
+        editCustomer.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         editCustomer.setText("Edit");
         editCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,6 +166,8 @@ public class CustomerPanel extends javax.swing.JFrame {
             }
         });
 
+        deleteCustomer.setBackground(new java.awt.Color(255, 51, 0));
+        deleteCustomer.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         deleteCustomer.setText("Delete");
         deleteCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -156,6 +180,9 @@ public class CustomerPanel extends javax.swing.JFrame {
                 customerPhoneKeyTyped(evt);
             }
         });
+
+        customerId.setEditable(false);
+        customerId.setBackground(new java.awt.Color(209, 210, 212));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -256,27 +283,26 @@ public class CustomerPanel extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addContainerGap(36, Short.MAX_VALUE)
                 .addComponent(btn_reset, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 612, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 612, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(159, 159, 159)
-                        .addComponent(btn_reset))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(44, 44, 44)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(148, Short.MAX_VALUE))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(193, 193, 193)
+                        .addComponent(btn_reset)))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -285,7 +311,7 @@ public class CustomerPanel extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 161, Short.MAX_VALUE))
+                .addGap(0, 12, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -314,7 +340,8 @@ public class CustomerPanel extends javax.swing.JFrame {
     private void deleteCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCustomerActionPerformed
         // TODO add your handling code here:
         int row  = customertb.getSelectedRow();
-        String selectedUserId = (String) customertb.getModel().getValueAt(row, 0);
+        //String selectedUserId = (String) customertb.getModel().getValueAt(row, 0);
+        int selectedUserId = (int) customertb.getModel().getValueAt(row, 0);
         try {
             db.deleteCustomer(selectedUserId);
             

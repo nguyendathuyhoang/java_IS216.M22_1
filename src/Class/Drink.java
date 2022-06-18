@@ -10,18 +10,18 @@ package Class;
  * Lớp Drink
  */
 public class Drink {
-    private String drink_id;
+    private int drink_id;
     // Mã đồ uống
     private String drink_name;
     // Tên đồ uống
     private int drink_price;
     // Giá đồ uống
 
-    public String getDrink_id() {
+    public int getDrink_id() {
         return drink_id;
     }
 
-    public void setDrink_id(String drink_id) {
+    public void setDrink_id(int drink_id) {
         this.drink_id = drink_id;
     }
 

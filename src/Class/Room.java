@@ -11,8 +11,9 @@ package Class;
  */
 public class Room {
     private int room_id;
-    private String room_no;
+    private String room_type;
     private long room_price;
+    private boolean room_empty;
 
     public int getRoom_id() {
         return room_id;
@@ -22,12 +23,12 @@ public class Room {
         this.room_id = room_id;
     }
 
-    public String getRoom_no() {
-        return room_no;
+    public String getRoom_type() {
+        return room_type;
     }
 
-    public void setRoom_no(String room_no) {
-        this.room_no = room_no;
+    public void setRoom_type(String room_type) {
+        this.room_type = room_type;
     }
 
     public long getRoom_price() {
@@ -37,6 +38,15 @@ public class Room {
     public void setRoom_price(long room_price) {
         this.room_price = room_price;
     }
+
+    public boolean isRoom_empty() {
+        return room_empty;
+    }
+
+    public void setRoom_empty(boolean room_empty) {
+        this.room_empty = room_empty;
+    }
+
     
     
 }
