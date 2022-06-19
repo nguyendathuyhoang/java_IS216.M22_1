@@ -73,7 +73,7 @@ public class HomePage extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         CustomInfolb = new javax.swing.JLabel();
         roomlb = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        bookinglb = new javax.swing.JLabel();
         foodlb = new javax.swing.JLabel();
         drinklb = new javax.swing.JLabel();
         servicelb = new javax.swing.JLabel();
@@ -134,9 +134,14 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-booking-50.png"))); // NOI18N
-        jLabel3.setText("Booking Diary");
+        bookinglb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        bookinglb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-order-50.png"))); // NOI18N
+        bookinglb.setText("Ordering");
+        bookinglb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bookinglbMouseClicked(evt);
+            }
+        });
 
         foodlb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         foodlb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-meal-50.png"))); // NOI18N
@@ -166,7 +171,7 @@ public class HomePage extends javax.swing.JFrame {
         });
 
         logoutlb.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        logoutlb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-login-50.png"))); // NOI18N
+        logoutlb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-logout64.png"))); // NOI18N
         logoutlb.setText("Log out");
         logoutlb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -421,30 +426,32 @@ public class HomePage extends javax.swing.JFrame {
                     .addComponent(logoutlb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CustomInfolb, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                     .addComponent(roomlb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(bookinglb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(CustomInfolb)
-                .addGap(18, 18, 18)
-                .addComponent(roomlb)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addComponent(foodlb)
-                .addGap(18, 18, 18)
-                .addComponent(drinklb)
-                .addGap(18, 18, 18)
-                .addComponent(servicelb)
-                .addGap(18, 18, 18)
-                .addComponent(logoutlb)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(CustomInfolb)
+                        .addGap(18, 18, 18)
+                        .addComponent(roomlb)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bookinglb)
+                        .addGap(18, 18, 18)
+                        .addComponent(foodlb)
+                        .addGap(18, 18, 18)
+                        .addComponent(drinklb)
+                        .addGap(18, 18, 18)
+                        .addComponent(servicelb)
+                        .addGap(18, 18, 18)
+                        .addComponent(logoutlb)))
+                .addGap(25, 25, 25))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -457,11 +464,126 @@ public class HomePage extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbUserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbUserActionPerformed
+
+    private void addRoomFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoomFieldActionPerformed
+        // TODO add your handling code here:
+        List<String> list = new ArrayList();
+        list = roomList.getSelectedValuesList();
+        if (!list.isEmpty()) {
+            String roomString = list.get(0);
+            for (int i = 1; i < list.size(); i++) {
+                roomString += "," + list.get(i);
+            }
+            tf_room.setText(roomString);
+        }
+    }//GEN-LAST:event_addRoomFieldActionPerformed
+
+    private void comboTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTypeActionPerformed
+        // TODO add your handling code here:
+        Vector<String> temp = new Vector<String>();
+
+        try
+        {
+            String query = "select maphong from phong where available = 1 and loaiphong = '"
+            +comboType.getSelectedItem().toString()+"'";
+            Connection conn = new DataConnection().Connect();
+            Statement stat = conn.createStatement();
+            ResultSet rs = stat.executeQuery(query);
+            DefaultListModel listModel = new DefaultListModel();
+            while(rs.next())
+            {
+                //temp.add(rs.getString("maphong"));
+                listModel.addElement(rs.getString("maphong"));
+            }
+            roomList.setModel(listModel);
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            System.out.println("Lỗi!");
+        }
+    }//GEN-LAST:event_comboTypeActionPerformed
+
+    /*
+    Log out label click
+    */
+    private void logoutlbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutlbMouseClicked
+        // TODO add your handling code here:
+        dispose(); // Tắt frame hiện tại
+        LoginPanel l = new LoginPanel();
+        l.setVisible(true);
+        //l.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_logoutlbMouseClicked
+
+    /*
+    Food label click
+    */
+    private void foodlbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foodlbMouseClicked
+        // TODO add your handling code here:
+        FoodPanel f = new FoodPanel();
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Khi tắt frame sau cùng thì frame trc đó vẫn giữ nguyên
+    }//GEN-LAST:event_foodlbMouseClicked
+
+    /*
+    Booking label click
+    */
+    private void bookinglbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookinglbMouseClicked
+        // TODO add your handling code here:
+        OrderPanel o = new OrderPanel();
+        o.setVisible(true);
+        o.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_bookinglbMouseClicked
+
+    /*
+    Room label click
+    */
+    private void roomlbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_roomlbMouseClicked
+        // TODO add your handling code here:
+        RoomPanel r = new RoomPanel();
+        r.setVisible(true);
+        r.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    }//GEN-LAST:event_roomlbMouseClicked
+    /*
+    Drink label click
+    */
+    private void drinklbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drinklbMouseClicked
+        // TODO add your handling code here:
+        DrinkPanel d = new DrinkPanel();
+        d.setVisible(true);
+        d.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_drinklbMouseClicked
+    /*
+    Service label click
+    */
+    private void servicelbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_servicelbMouseClicked
+        // TODO add your handling code here:
+        ServicesPanel s = new ServicesPanel();
+        s.setVisible(true);
+        s.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_servicelbMouseClicked
+
+    /*
+    Customer Info label click
+    */
+    private void CustomInfolbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CustomInfolbMouseClicked
+        // TODO add your handling code here:
+        CustomerPanel c = new CustomerPanel();
+        c.setVisible(true);
+        c.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_CustomInfolbMouseClicked
     
      /*
     Search User Enter
@@ -542,126 +664,7 @@ public class HomePage extends javax.swing.JFrame {
         }
 
     }
-
-    /*private void clearAllFields() {
-        cbUser.getEditor().setItem(null);
-        //combo_reservationType.setSelectedIndex(0);
-
-        customerAddress.setText("");
-        customerNum.setText("");
-        tf_customerId.setText("");
-        tf_guestNo.setText("");
-        customerName.setText("");
-        tf_rooms.setText("");
-        checkinDay.setDate(new Date());
-        checkoutDay.setDate(null);
-        existingCustomer = false;
-    }*/
     
-    
-    /*
-    Food label click
-    */
-    private void foodlbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foodlbMouseClicked
-        // TODO add your handling code here:
-        FoodPanel f = new FoodPanel();
-        f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Khi tắt frame sau cùng thì frame trc đó vẫn giữ nguyên
-    }//GEN-LAST:event_foodlbMouseClicked
-
-    /*
-    Drink label click
-    */
-    private void drinklbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drinklbMouseClicked
-        // TODO add your handling code here:
-        DrinkPanel d = new DrinkPanel();
-        d.setVisible(true);
-        d.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Khi tắt frame sau cùng thì frame trc đó vẫn giữ nguyên
-    }//GEN-LAST:event_drinklbMouseClicked
-    
-    /*
-    Services label click
-    */
-    private void servicelbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_servicelbMouseClicked
-        // TODO add your handling code here:
-        ServicesPanel s = new ServicesPanel();
-        s.setVisible(true);
-        s.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Khi tắt frame sau cùng thì frame trc đó vẫn giữ nguyên
-    }//GEN-LAST:event_servicelbMouseClicked
-    
-    /*
-    Customer Info label click
-    */
-    private void CustomInfolbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CustomInfolbMouseClicked
-        // TODO add your handling code here:
-        CustomerPanel c = new CustomerPanel();
-        c.setVisible(true);
-        c.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Khi tắt frame sau cùng thì frame trc đó vẫn giữ nguyên
-        
-    }//GEN-LAST:event_CustomInfolbMouseClicked
-    
-    /*
-    Log out label click
-    */
-    private void logoutlbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutlbMouseClicked
-        // TODO add your handling code here:
-        dispose(); // Tắt frame hiện tại
-        LoginPanel l = new LoginPanel();
-        l.setVisible(true);
-        //l.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);  
-    }//GEN-LAST:event_logoutlbMouseClicked
-
-    private void roomlbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_roomlbMouseClicked
-        // TODO add your handling code here:
-        RoomPanel r = new RoomPanel();
-        r.setVisible(true);
-        r.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-    }//GEN-LAST:event_roomlbMouseClicked
-
-    private void cbUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbUserActionPerformed
-
-    private void addRoomFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoomFieldActionPerformed
-        // TODO add your handling code here:
-        List<String> list = new ArrayList();
-        list = roomList.getSelectedValuesList();
-        if (!list.isEmpty()) {
-            String roomString = list.get(0);
-            for (int i = 1; i < list.size(); i++) {
-                roomString += "," + list.get(i);
-            }
-            tf_room.setText(roomString);
-        }
-    }//GEN-LAST:event_addRoomFieldActionPerformed
-
-    private void comboTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTypeActionPerformed
-        // TODO add your handling code here:
-        Vector<String> temp = new Vector<String>();
-
-        try
-        {   
-            String query = "select maphong from phong where available = 1 and loaiphong = '"
-                    +comboType.getSelectedItem().toString()+"'";
-            Connection conn = new DataConnection().Connect();
-            Statement stat = conn.createStatement();
-            ResultSet rs = stat.executeQuery(query);
-            DefaultListModel listModel = new DefaultListModel();
-            while(rs.next())
-            {
-                //temp.add(rs.getString("maphong"));
-                listModel.addElement(rs.getString("maphong"));
-            }
-            roomList.setModel(listModel);
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-            System.out.println("Lỗi!");
-        }
-    }//GEN-LAST:event_comboTypeActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -701,6 +704,7 @@ public class HomePage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel CustomInfolb;
     private javax.swing.JButton addRoomField;
+    private javax.swing.JLabel bookinglb;
     private javax.swing.JButton btSave;
     private javax.swing.JComboBox<String> cbUser;
     private com.toedter.calendar.JDateChooser checkinDay;
@@ -720,7 +724,6 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

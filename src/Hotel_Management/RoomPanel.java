@@ -125,7 +125,7 @@ public class RoomPanel extends javax.swing.JFrame {
     public RoomPanel() {
         initComponents();
         populateRoomTable();
-        ComboRoomType();
+        //ComboRoomType();
     }
 
     /**
@@ -219,7 +219,7 @@ public class RoomPanel extends javax.swing.JFrame {
         roomck.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         roomck.setText("Available");
 
-        cbType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        cbType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D", "E" }));
         cbType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbTypeActionPerformed(evt);
@@ -278,6 +278,7 @@ public class RoomPanel extends javax.swing.JFrame {
                 .addContainerGap(96, Short.MAX_VALUE))
         );
 
+        jButton1.setBackground(new java.awt.Color(255, 0, 102));
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-reset-48.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -285,6 +286,7 @@ public class RoomPanel extends javax.swing.JFrame {
             }
         });
 
+        roomtb.setBackground(new java.awt.Color(255, 204, 0));
         roomtb.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -350,7 +352,7 @@ public class RoomPanel extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 27, Short.MAX_VALUE))
+                .addGap(0, 2, Short.MAX_VALUE))
         );
 
         pack();

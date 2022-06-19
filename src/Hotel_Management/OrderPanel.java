@@ -4,17 +4,78 @@
  */
 package Hotel_Management;
 
+import Class.*;
+import Database.*;
+import java.sql.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
- * @author ADMIN
+ * @author Nguyễn Đạt Huy Hoàng
+ * Form order đồ ăn, thức uống, dịch vụ
  */
 public class OrderPanel extends javax.swing.JFrame {
 
     /**
      * Creates new form OrderPanel
      */
+    //DefaultTableModel itemtb;
+    //DefaultTableModel model = (DefaultTableModel) itemtb.getModel();
+    Ordering order = new Ordering();
+    FoodDb fooddb = new FoodDb();
+    DrinkDb drinkdb = new DrinkDb();
+    ServiceDb servicedb = new ServiceDb();
+    OrderDb orderdb = new OrderDb();
+    ResultSet rs;
+    
+    private void orderCreation()
+    {
+        Ordering order = new Ordering(); // Tạo order
+        order.setUser_id(customId.getText()); // Lấy tên makh từ textfield
+        order.setDayPayment(dayCheckout.getText()); // Lấy giá order từ textfield
+        try {
+            //order.setId_order(Integer.parseInt(bookingId.getText()));
+        } catch (Exception ex) {
+            order.setId_order(-1);
+        }
+    }
+    
+    //DefaultTableModel model = (DefaultTableModel) itemtb.getModel();
+    /*private void populateAllTable()
+    {
+        ResultSet rsorder = orderdb.getFood();
+        ordFoodtb.setModel(DbUtils.resultSetToTableModel(rsorder));
+        
+        ResultSet rsdrink = drinkdb.getDrink();
+        ordDrinktb.setModel(DbUtils.resultSetToTableModel(rsdrink));
+        
+        ResultSet rsservice = servicedb.getService();
+        ordServicetb.setModel(DbUtils.resultSetToTableModel(rsservice));
+        
+        //db.flushAll();
+    }*/
+    public static void AddRowToJTable(Object[] dataRow)
+    {
+        DefaultTableModel model = (DefaultTableModel) itemtb.getModel();
+        model.addRow(dataRow);
+    }
+    
+    private void emptyField()
+    {
+        bookingId.setText("");
+        customId.setText("");
+        customName.setText("");
+        roomId.setText("");
+        roomType.setText("");
+        dayCheckin.setText("");
+        dayCheckout.setText("");
+    }
+    
     public OrderPanel() {
         initComponents();
+        //populateAllTable();
     }
 
     /**
@@ -32,13 +93,33 @@ public class OrderPanel extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        itemtb = new javax.swing.JTable();
+        ordbt = new javax.swing.JButton();
+        customId = new javax.swing.JTextField();
+        roomId = new javax.swing.JTextField();
+        roomType = new javax.swing.JTextField();
+        dayCheckin = new javax.swing.JTextField();
+        dayCheckout = new javax.swing.JTextField();
+        resetbt = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        customName = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        bookingId = new javax.swing.JTextField();
+        btFood = new javax.swing.JButton();
+        btDrink = new javax.swing.JButton();
+        btService = new javax.swing.JButton();
+        btclear = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Order");
 
+        jPanel1.setBackground(new java.awt.Color(153, 255, 255));
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Customer_ID");
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Room_ID");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -50,34 +131,199 @@ public class OrderPanel extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Checkout Date");
 
+        itemtb.setBackground(new java.awt.Color(0, 153, 153));
+        itemtb.setForeground(new java.awt.Color(255, 255, 255));
+        itemtb.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Item", "Quantity"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(itemtb);
+
+        ordbt.setBackground(new java.awt.Color(255, 51, 51));
+        ordbt.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        ordbt.setText("Order");
+        ordbt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ordbtActionPerformed(evt);
+            }
+        });
+
+        customId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customIdActionPerformed(evt);
+            }
+        });
+
+        resetbt.setBackground(new java.awt.Color(51, 255, 0));
+        resetbt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-reset-48.png"))); // NOI18N
+        resetbt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetbtActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel6.setText("Customer_Name");
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel7.setText("Booking_ID");
+
+        bookingId.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                bookingIdKeyTyped(evt);
+            }
+        });
+
+        btFood.setBackground(new java.awt.Color(255, 51, 255));
+        btFood.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btFood.setText("Food");
+        btFood.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btFoodActionPerformed(evt);
+            }
+        });
+
+        btDrink.setBackground(new java.awt.Color(51, 153, 255));
+        btDrink.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btDrink.setText("Drink");
+        btDrink.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDrinkActionPerformed(evt);
+            }
+        });
+
+        btService.setBackground(new java.awt.Color(255, 102, 102));
+        btService.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btService.setText("Service");
+        btService.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btServiceActionPerformed(evt);
+            }
+        });
+
+        btclear.setBackground(new java.awt.Color(255, 255, 0));
+        btclear.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btclear.setText("Remove Choice");
+        btclear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btclearActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
-                .addContainerGap(602, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(97, 97, 97)
+                                .addComponent(resetbt)
+                                .addGap(271, 271, 271))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btDrink, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btFood, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btService))
+                                .addGap(42, 42, 42)))
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(customId)
+                            .addComponent(roomType)
+                            .addComponent(dayCheckin)
+                            .addComponent(dayCheckout)
+                            .addComponent(customName)
+                            .addComponent(bookingId)
+                            .addComponent(roomId, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(219, 219, 219)
+                        .addComponent(btclear)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addComponent(ordbt, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(113, 113, 113))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addContainerGap(299, Short.MAX_VALUE))
+                .addGap(39, 39, 39)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(bookingId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(1, 1, 1)
+                        .addComponent(btFood)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(customId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel6)
+                                    .addComponent(customName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(27, 27, 27)
+                                .addComponent(btDrink)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(roomId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(roomType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(btService)))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(dayCheckin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addGap(48, 48, 48)
+                                .addComponent(ordbt, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(28, 28, 28)
+                        .addComponent(btclear)
+                        .addGap(24, 24, 24)))
+                .addGap(34, 34, 34)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dayCheckout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(31, 31, 31)
+                .addComponent(resetbt)
+                .addContainerGap(124, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -89,12 +335,143 @@ public class OrderPanel extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 13, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void customIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customIdActionPerformed
+        // TODO add your handling code here:
+        /*try
+        {
+            String query = "select * from datphong d, khachhang k where d.makh = "
+                    + bookingId.getText();
+            Connection conn = new DataConnection().Connect();
+            Statement stat = conn.createStatement();
+            ResultSet rs = stat.executeQuery(query);
+            
+            while(rs.next())
+            {
+                customId.setText(rs.getString("makh"));
+                customName.setText(rs.getString("hoten"));
+                roomId.setText(rs.getString("maphong"));
+                roomType.setText(rs.getString("loaiphong"));
+                dayCheckin.setText(rs.getString("ngayden"));
+                dayCheckout.setText(rs.getString("ngaydi"));
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Truy vấn thất bại!");
+        }*/
+    }//GEN-LAST:event_customIdActionPerformed
+
+    private void bookingIdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bookingIdKeyTyped
+        // TODO add your handling code here:
+        try
+        {
+            String query = "select * from datphong d, khachhang k, phong p where d.makh = k.makh and d.maphong = p.maphong and madat = '"
+                    + bookingId.getText()+"'";
+            Connection conn = new DataConnection().Connect();
+            Statement stat = conn.createStatement();
+            ResultSet rs = stat.executeQuery(query);
+            
+            while(rs.next())
+            {
+                customId.setText(rs.getString("makh"));
+                customName.setText(rs.getString("hoten"));
+                roomId.setText(rs.getString("maphong"));
+                roomType.setText(rs.getString("loaiphong"));
+                dayCheckin.setText(rs.getString("ngden"));
+                dayCheckout.setText(rs.getString("ngdi"));
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Truy vấn thất bại!");
+        }
+    }//GEN-LAST:event_bookingIdKeyTyped
+
+    private void resetbtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetbtActionPerformed
+        // TODO add your handling code here:
+        
+        DefaultTableModel model = (DefaultTableModel) itemtb.getModel();
+        int allRow = itemtb.getRowCount();
+        
+        for (int i=allRow-1;i>=0;i--)
+        {
+            model.removeRow(i);
+        }
+    }//GEN-LAST:event_resetbtActionPerformed
+
+    private void btFoodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFoodActionPerformed
+        // TODO add your handling code here:
+        OrderFood ordF  = new OrderFood();
+        ordF.setVisible(true);
+        ordF.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Khi tắt frame sau cùng thì frame trc đó vẫn giữ nguyên
+    }//GEN-LAST:event_btFoodActionPerformed
+
+    private void btDrinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDrinkActionPerformed
+        // TODO add your handling code here:
+        OrderDrink ordD  = new OrderDrink();
+        ordD.setVisible(true);
+        ordD.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Khi tắt frame sau cùng thì frame trc đó vẫn giữ nguyên
+    }//GEN-LAST:event_btDrinkActionPerformed
+
+    private void btServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btServiceActionPerformed
+        // TODO add your handling code here:
+        OrderService ordS  = new OrderService();
+        ordS.setVisible(true);
+        ordS.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_btServiceActionPerformed
+
+    private void btclearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btclearActionPerformed
+        // TODO add your handling code here:
+        if(itemtb.getSelectedRow() != -1) {
+               // remove selected row from the model
+               DefaultTableModel model = (DefaultTableModel) itemtb.getModel();
+               model.removeRow(itemtb.getSelectedRow());
+               //JOptionPane.showMessageDialog(null, "Selected row deleted successfully");
+            }
+    }//GEN-LAST:event_btclearActionPerformed
+
+    private void ordbtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ordbtActionPerformed
+        // TODO add your handling code here:
+        //JOptionPane.showMessageDialog(null, "Thực hiện giao dịch thành công!");
+        DefaultTableModel model = (DefaultTableModel) itemtb.getModel();
+        System.out.println(model.getValueAt(0, 0));
+        int rowCount=model.getRowCount();
+        for (int i=0;i<=rowCount;i++)
+        {
+            try
+            {
+                
+            }
+            catch(Exception e)
+            {
+                
+            }
+        }
+        
+        Connection conn = new DataConnection().Connect();
+        try
+        {
+            String insertOrder = "insert into hoadon(makh, ngayhd) values ("+customId.getText()+",'"+dayCheckout.getText()+"')";
+            PreparedStatement stat =conn.prepareStatement(insertOrder);
+            stat.execute();
+            JOptionPane.showMessageDialog(null, "Thêm thành công!");
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Thêm thất bại!");
+        }
+            
+    }//GEN-LAST:event_ordbtActionPerformed
 
     /**
      * @param args the command line arguments
@@ -132,11 +509,28 @@ public class OrderPanel extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField bookingId;
+    private javax.swing.JButton btDrink;
+    private javax.swing.JButton btFood;
+    private javax.swing.JButton btService;
+    private javax.swing.JButton btclear;
+    private javax.swing.JTextField customId;
+    private javax.swing.JTextField customName;
+    private javax.swing.JTextField dayCheckin;
+    private javax.swing.JTextField dayCheckout;
+    private static javax.swing.JTable itemtb;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JButton ordbt;
+    private javax.swing.JButton resetbt;
+    private javax.swing.JTextField roomId;
+    private javax.swing.JTextField roomType;
     // End of variables declaration//GEN-END:variables
 }
