@@ -50,7 +50,8 @@ public class DataOperation {
     }
     
     public int getCustomerId(UserInfo user)
-    { int id = -1;
+    { 
+        int id = -1;
         try {
             String query = "select makh from khachhang where hoten='"+user.getUser_name()+"' and sodt ='"+user.getUser_phone()+"'";
             
@@ -60,7 +61,7 @@ public class DataOperation {
             //System.out.println(" user id "+ rs.getInt("user_id"));
             
             id = rs.getInt("makh");
-            
+                
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.toString() + "\n error coming from returning AN user function");
         }

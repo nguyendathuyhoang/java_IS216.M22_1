@@ -175,9 +175,26 @@ public class CustomerPanel extends javax.swing.JFrame {
             }
         });
 
+        customerAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerAddActionPerformed(evt);
+            }
+        });
+
+        customerPhone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerPhoneActionPerformed(evt);
+            }
+        });
         customerPhone.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 customerPhoneKeyTyped(evt);
+            }
+        });
+
+        customerMail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerMailActionPerformed(evt);
             }
         });
 
@@ -245,6 +262,8 @@ public class CustomerPanel extends javax.swing.JFrame {
                 .addContainerGap(64, Short.MAX_VALUE))
         );
 
+        customertb.setBackground(new java.awt.Color(102, 102, 255));
+        customertb.setForeground(new java.awt.Color(255, 255, 255));
         customertb.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -271,6 +290,7 @@ public class CustomerPanel extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(customertb);
 
+        btn_reset.setBackground(new java.awt.Color(204, 0, 204));
         btn_reset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-reset-48.png"))); // NOI18N
         btn_reset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -297,8 +317,8 @@ public class CustomerPanel extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(44, 44, 44)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(193, 193, 193)
                         .addComponent(btn_reset)))
@@ -323,10 +343,27 @@ public class CustomerPanel extends javax.swing.JFrame {
 
     private void addCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustomerActionPerformed
         // TODO add your handling code here:
-        ObjectCreation();
-        db.insertCustomer(user);
-        populateWithCustomerData();
-        emptyField();
+        if (customerName.getText().isEmpty()||customerAdd.getText().isEmpty()||customerPhone.getText().isEmpty()
+                ||customerMail.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+        }
+        else
+        {
+            String getMail = customerMail.getText();
+            boolean checkMail = getMail.contains("@gmail.com");
+            if (checkMail == false)
+            {
+                JOptionPane.showMessageDialog(null, "Email không hợp lệ! Mời bạn nhập lại");
+            }
+            else
+            {
+                ObjectCreation();
+            db.insertCustomer(user);
+            populateWithCustomerData();
+            emptyField();
+            }
+        }
     }//GEN-LAST:event_addCustomerActionPerformed
 
     private void editCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editCustomerActionPerformed
@@ -377,6 +414,18 @@ public class CustomerPanel extends javax.swing.JFrame {
         deleteCustomer.setEnabled(true);
         addCustomer.setEnabled(false);
     }//GEN-LAST:event_customertbMouseClicked
+
+    private void customerPhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerPhoneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_customerPhoneActionPerformed
+
+    private void customerAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerAddActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_customerAddActionPerformed
+
+    private void customerMailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerMailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_customerMailActionPerformed
 
     /**
      * @param args the command line arguments
