@@ -23,7 +23,10 @@ import javax.swing.table.DefaultTableModel;
 import com.lowagie.text.Document;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPTable;
+import java.awt.Font;
 import java.io.FileOutputStream;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 /**
  *
@@ -34,7 +37,9 @@ public class PaymentPanel extends javax.swing.JFrame {
     String sdt = "\\d+";
     ArrayList<Integer> mahoadon = new ArrayList<Integer>();
     int makhachhang = 0;
-    
+    int giaPhong = 0;
+    int tongTien = 0;
+
     Connection conn = DataConnection.Connect();
     PreparedStatement stat = null;
     ResultSet rs = null;
@@ -232,24 +237,33 @@ public class PaymentPanel extends javax.swing.JFrame {
         }
     }
     
+    public static String formatNumber(int value){
+        String pattern = "###,###,###,###";
+        DecimalFormat df = new DecimalFormat(pattern);
+        return df.format(value);
+    }
+    
     private void checkoutSDTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkoutSDTActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_checkoutSDTActionPerformed
 
     private void loadChiTietHoaDon(){
+        DefaultTableModel cthd_model = (DefaultTableModel)hoadonTable.getModel();
+        cthd_model.setRowCount(0);
+        mahoadon.removeAll(mahoadon);
         try {
             java.util.Date ngayDen = new java.util.Date();
             java.util.Date ngayDi = new java.util.Date();
             java.util.Date Today = new java.util.Date();
-            int giaPhong = 0;
-            int tongTien = 0;
-            
+            giaPhong = 0;
+            tongTien = 0;
+
             String query = "select makh from khachhang where email = ? and sodt = ?;";
             stat = conn.prepareStatement(query);
             stat.setString(1, checkoutEmail.getText());
             stat.setString(2, checkoutSDT.getText());
             rs = stat.executeQuery();
-            
+
             if (rs.next()){
                 makhachhang = rs.getInt("makh");
                 query = "select * from datphong dp join phong p on dp.maphong = p.maphong where makh = ?";
@@ -270,7 +284,6 @@ public class PaymentPanel extends javax.swing.JFrame {
                         if (!ngayDen.after(ngayhoadon) && !ngayDi.before(ngayhoadon))
                             mahoadon.add(rs2.getInt("mahd"));
                     }
-                    DefaultTableModel cthd_model = new DefaultTableModel(null, new String[]{"Tên sản phẩm dịch vụ", "Số lượng", "Thành tiền"});
                     String query3 = null;
                     PreparedStatement PS3 = null;
                     ResultSet rs3 = null;
@@ -280,7 +293,7 @@ public class PaymentPanel extends javax.swing.JFrame {
                         PS3.setInt(1, mahoadon.get(i));
                         rs3 = PS3.executeQuery();
                         while (rs3.next()) {
-                            cthd_model.addRow(new Object[] {rs3.getString("TENDOAN"), rs3.getInt("SOLUONG"), rs3.getInt("GIADOAN")*rs3.getInt("SOLUONG")});
+                            cthd_model.addRow(new Object[] {rs3.getString("TENDOAN"), rs3.getInt("SOLUONG"), formatNumber(rs3.getInt("GIADOAN")*rs3.getInt("SOLUONG"))});
                         }
 
                         query3 = "SELECT MAHD, CT.MATU, TENTU, GIATU, COUNT(CT.MATU) SOLUONG FROM CTHOADON CT JOIN THUCUONG T ON CT.MATU = T.MATU WHERE MAHD = ? GROUP BY CT.MATU;";
@@ -288,7 +301,7 @@ public class PaymentPanel extends javax.swing.JFrame {
                         PS3.setInt(1, mahoadon.get(i));
                         rs3 = PS3.executeQuery();
                         while (rs3.next()) {
-                            cthd_model.addRow(new Object[] {rs3.getString("TENTU"), rs3.getInt("SOLUONG"), rs3.getInt("GIATU")*rs3.getInt("SOLUONG")});
+                            cthd_model.addRow(new Object[] {rs3.getString("TENTU"), rs3.getInt("SOLUONG"), formatNumber(rs3.getInt("GIATU")*rs3.getInt("SOLUONG"))});
                         }
 
                         query3 = "SELECT MAHD, CT.MADV, TENDV, GIADV, COUNT(CT.MADV) SOLUONG FROM CTHOADON CT JOIN DICHVU DV ON CT.MADV = DV.MADV WHERE MAHD = ? GROUP BY CT.MADV;";
@@ -296,10 +309,9 @@ public class PaymentPanel extends javax.swing.JFrame {
                         PS3.setInt(1, mahoadon.get(i));
                         rs3 = PS3.executeQuery();
                         while (rs3.next()) {
-                            cthd_model.addRow(new Object[] {rs3.getString("TENDV"), rs3.getInt("SOLUONG"), rs3.getInt("GIADV")*rs3.getInt("SOLUONG")});
+                            cthd_model.addRow(new Object[] {rs3.getString("TENDV"), rs3.getInt("SOLUONG"), formatNumber(rs3.getInt("GIADV")*rs3.getInt("SOLUONG"))});
                         }
                     }
-                    hoadonTable.setModel(cthd_model);
                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                     LocalDate dateDen = LocalDate.parse(df.format(ngayDen), DateTimeFormatter.ISO_LOCAL_DATE);
                     LocalDate dateDi = null;
@@ -310,13 +322,13 @@ public class PaymentPanel extends javax.swing.JFrame {
                     Duration diff = Duration.between(dateDen.atStartOfDay(), dateDi.atStartOfDay());
                     long diffDays = diff.toDays();
                     giaPhong = ((int)diffDays + 1) * giaPhong;
-                    tienPhong.setText(String.valueOf(giaPhong) + " VNĐ");
+                    tienPhong.setText(formatNumber(giaPhong) + " VNĐ");
 
                     for (int i=0; i<hoadonTable.getRowCount(); i++){
-                        tongTien = tongTien + Integer.parseInt(hoadonTable.getValueAt(i, 2).toString());
+                        tongTien = tongTien + Integer.parseInt((hoadonTable.getValueAt(i, 2).toString()).replace(",", ""));
                     }
                     tongTien = tongTien + giaPhong;
-                    tongCong.setText(String.valueOf(tongTien) + " VNĐ");
+                    tongCong.setText(formatNumber(tongTien) + " VNĐ");
                     thanhtoanBTN.setEnabled(true);
                 }
                 else JOptionPane.showMessageDialog(null, "Không thể tạo hóa đơn\nKhách hàng chưa đặt phòng");
@@ -327,21 +339,19 @@ public class PaymentPanel extends javax.swing.JFrame {
             System.out.print(e);
             JOptionPane.showMessageDialog(null, "Lỗi");
         }
-        
+
     }
-    
+
     private void clearForm(){
         thanhtoanBTN.setEnabled(false);
-        DefaultTableModel dtm = (DefaultTableModel) hoadonTable.getModel();
-        int nrow = dtm.getRowCount();
-        for (int i = nrow - 1; i>=0; i--){
-            dtm.removeRow(i);
-        }
+        DefaultTableModel dtm = (DefaultTableModel)hoadonTable.getModel();
+        dtm.getDataVector().removeAllElements();
+        dtm.fireTableDataChanged();
         hoadonTable.setModel(dtm);
         tienPhong.setText("");
         tongCong.setText("");
     }
-    
+
     private void hoadonBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hoadonBTNActionPerformed
         // TODO add your handling code here:
         if (((checkoutEmail.getText().trim()).equals("")) || ((checkoutSDT.getText().trim()).equals(""))){
@@ -365,55 +375,59 @@ public class PaymentPanel extends javax.swing.JFrame {
             clearForm();
         }
         else {
-            clearForm();
             loadChiTietHoaDon();
         }
     }//GEN-LAST:event_hoadonBTNActionPerformed
 
     private void thanhtoanBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thanhtoanBTNActionPerformed
         // TODO add your handling code here:
-        String query = "delete from datphong where makh = ?";
-        
         String path = "";
         JFileChooser j = new JFileChooser();
         j.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int x = j.showSaveDialog(this);
-        
+
         if (x == JFileChooser.APPROVE_OPTION){
             path = j.getSelectedFile().getPath();
         }
-        
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat codeformat = new SimpleDateFormat("ssmmHHddMMyyyy");
+        java.util.Date now = new java.util.Date();
         Document doc = new Document();
         try {
-            PdfWriter.getInstance(doc, new FileOutputStream(path + "/hoadon.pdf"));
+            PdfWriter.getInstance(doc, new FileOutputStream(path + "/hoadon" + codeformat.format(now) + makhachhang + ".pdf"));
             doc.open();
             doc.add(new Paragraph("RECEIPT"));
+            doc.add(new Paragraph("Customer ID: " + makhachhang));
+            doc.add(new Paragraph("Date: " + formatter.format(now)));
             PdfPTable tbl = new PdfPTable(3);
             tbl.setSpacingBefore(11f);
             tbl.setSpacingAfter(11f);
             tbl.addCell("Product (service) names");
             tbl.addCell("Amount");
             tbl.addCell("Cash");
-            
+
             for (int i = 0; i < hoadonTable.getRowCount(); i++){
                 String name = hoadonTable.getModel().getValueAt(i, 0).toString();
                 String soluong = hoadonTable.getModel().getValueAt(i, 1).toString();
-                String thanhtien = hoadonTable.getModel().getValueAt(i, 2).toString();
-                
+                String thanhtien = hoadonTable.getModel().getValueAt(i, 2).toString() + " VND";
+
                 tbl.addCell(name);
                 tbl.addCell(soluong);
                 tbl.addCell(thanhtien);
             }
             doc.add(tbl);
-            
+            doc.add(new Paragraph("Room fee: " + formatNumber(giaPhong) + "VND"));
+            doc.add(new Paragraph("Total: " + formatNumber(tongTien) + "VND"));
+
+            String query = "delete from datphong where makh = ?";
             stat = conn.prepareStatement(query);
             stat.setInt(1, makhachhang);
-            //stat.executeUpdate();
+            stat.executeUpdate();
             JOptionPane.showMessageDialog(null, "Đã thanh toán hóa đơn");
         }
         catch (Exception e){
             System.out.println(e);
-            JOptionPane.showMessageDialog(null, "Lỗi");
+            JOptionPane.showMessageDialog(null, "Lỗi in hóa đơn");
         }
         doc.close();
         clearForm();
@@ -426,7 +440,7 @@ public class PaymentPanel extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
