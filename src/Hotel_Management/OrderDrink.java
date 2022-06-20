@@ -7,6 +7,7 @@ package Hotel_Management;
 import Class.*;
 import Database.*;
 import java.sql.*;
+import java.util.*;
 import javax.swing.*;
 
 /**
@@ -19,6 +20,8 @@ public class OrderDrink extends javax.swing.JFrame {
     /**
      * Creates new form OrderDrink
      */
+    ArrayList<Integer> mathucuong = new ArrayList<Integer>();
+    
     public OrderDrink() {
         initComponents();
         comboDrink();
@@ -28,14 +31,16 @@ public class OrderDrink extends javax.swing.JFrame {
     {
         try
         {
-            String queryFood = "select tentu from thucuong";
+            String queryFood = "select matu, tentu from thucuong";
             Connection conn = new DataConnection().Connect();
             Statement stat = conn.createStatement();
             ResultSet rs = stat.executeQuery(queryFood);
+            cbDrink.removeAllItems();
             
             while(rs.next())
             {
                 cbDrink.addItem(rs.getString("tentu"));
+                mathucuong.add(rs.getInt("matu"));
             }
             
         }
@@ -157,6 +162,7 @@ public class OrderDrink extends javax.swing.JFrame {
         OrderPanel.AddRowToJTable(new Object[] {
             cbDrink.getSelectedItem(),
             drinkQuantity.getText(),
+            false, true, false, mathucuong.get(cbDrink.getSelectedIndex())
         });
     }//GEN-LAST:event_btOKActionPerformed
 

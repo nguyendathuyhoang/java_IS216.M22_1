@@ -7,6 +7,7 @@ package Hotel_Management;
 import Class.*;
 import Database.*;
 import java.sql.*;
+import java.util.*;
 import javax.swing.*;
 import net.proteanit.sql.DbUtils;
 
@@ -24,6 +25,7 @@ public class OrderFood extends javax.swing.JFrame {
     Food food;
     ResultSet rs;
     FoodDb dbFood = new FoodDb();
+    ArrayList<Integer> madoan = new ArrayList<Integer>();
     
     public OrderFood() {
         initComponents();
@@ -150,14 +152,16 @@ public class OrderFood extends javax.swing.JFrame {
     {
         try
         {
-            String queryFood = "select tendoan from doan";
+            String queryFood = "select madoan, tendoan from doan";
             Connection conn = new DataConnection().Connect();
             Statement stat = conn.createStatement();
             ResultSet rs = stat.executeQuery(queryFood);
+            cbFood.removeAllItems();
             
             while(rs.next())
             {
                 cbFood.addItem(rs.getString("tendoan"));
+                madoan.add(rs.getInt("madoan"));
             }
             
         }
@@ -179,8 +183,8 @@ public class OrderFood extends javax.swing.JFrame {
         OrderPanel.AddRowToJTable(new Object[] {
             cbFood.getSelectedItem(),
             foodQuantity.getText(),
+            true, false, false, madoan.get(cbFood.getSelectedIndex())
         });
-        
     }//GEN-LAST:event_btOKActionPerformed
 
     /**
