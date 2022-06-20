@@ -6,6 +6,7 @@ package Hotel_Management;
 
 import Class.*;
 import Database.*;
+import com.toedter.calendar.JDateChooser;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.*;
@@ -28,8 +29,8 @@ public class HomePage extends javax.swing.JFrame {
     DataOperation db = new DataOperation();
     CustomerDb customerdb = new CustomerDb();
     RoomDb roomdb = new RoomDb();
-    //Booking booking;
-    //BookingDb bookingdb = new BookingDb();
+    Booking booking;
+    BookingDb bookingdb = new BookingDb();
     boolean existingCustomer = false;
     UserInfo user;
     ResultSet result;
@@ -208,6 +209,11 @@ public class HomePage extends javax.swing.JFrame {
         btSave.setBackground(new java.awt.Color(255, 0, 0));
         btSave.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btSave.setText("Save");
+        btSave.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btSaveMouseClicked(evt);
+            }
+        });
 
         customerId.setEditable(false);
         customerId.setBackground(new java.awt.Color(209, 210, 212));
@@ -609,6 +615,21 @@ public class HomePage extends javax.swing.JFrame {
         p.setVisible(true);
         p.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_paymentlbMouseClicked
+
+    private void btSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSaveMouseClicked
+        // TODO add your handling code here:
+//        UserInfo user = new UserInfo();
+        int userId = Integer.parseInt(customerId.getText());
+//        user.setUser_address(customerAddress.getText());
+//        user.setUser_email(customerMail.getText());
+//        user.setUser_name(customerName.getName());
+//        user.setUser_phone(customerNum.getText());
+        int roomId = Integer.parseInt(tf_room.getText());
+        JDateChooser checkInDate = this.checkinDay;
+        JDateChooser checkOutDate = this.checkoutDay;
+        
+        this.bookingdb.insertBooking(userId, roomId, checkInDate, checkOutDate);
+    }//GEN-LAST:event_btSaveMouseClicked
     
      /*
     Search User Enter
