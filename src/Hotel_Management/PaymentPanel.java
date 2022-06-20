@@ -37,8 +37,11 @@ public class PaymentPanel extends javax.swing.JFrame {
     String sdt = "\\d+";
     ArrayList<Integer> mahoadon = new ArrayList<Integer>();
     int makhachhang = 0;
+    int maphong = 0;
     int giaPhong = 0;
     int tongTien = 0;
+    java.util.Date today = new java.util.Date();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     Connection conn = DataConnection.Connect();
     PreparedStatement stat = null;
@@ -349,6 +352,7 @@ public class PaymentPanel extends javax.swing.JFrame {
                     ngayDen = new java.util.Date(rs.getDate("NGDEN").getTime());
                     ngayDi = new java.util.Date(rs.getDate("NGDI").getTime());
                     giaPhong = rs.getInt("GIAPHONG");
+                    maphong = rs.getInt("MAPHONG");
                     query = "select mahd, ngayhd from hoadon where makh = ?;";
                     stat = conn.prepareStatement(query);
                     stat.setString(1, String.valueOf(makhachhang));
@@ -363,6 +367,11 @@ public class PaymentPanel extends javax.swing.JFrame {
                     PreparedStatement PS3 = null;
                     ResultSet rs3 = null;
                     for (int i = 0; i < mahoadon.size(); i++) {
+                        query3 = "UPDATE HOADON SET DATHANHTOAN = 1 WHERE MAHD = ?";
+                        PS3 = conn.prepareStatement(query3);
+                        PS3.setInt(1, mahoadon.get(i));
+                        PS3.executeUpdate();
+                        
                         query3 = "SELECT MAHD, CT.MADOAN, TENDOAN, GIADOAN, COUNT(CT.MADOAN) AS SOLUONG FROM CTHOADON AS CT JOIN DOAN AS DA ON CT.MADOAN = DA.MADOAN WHERE MAHD = ? GROUP BY CT.MADOAN;";
                         PS3 = conn.prepareStatement(query3);
                         PS3.setInt(1, mahoadon.get(i));
@@ -497,6 +506,14 @@ public class PaymentPanel extends javax.swing.JFrame {
             String query = "delete from datphong where makh = ?";
             stat = conn.prepareStatement(query);
             stat.setInt(1, makhachhang);
+            stat.executeUpdate();
+            
+            query = "insert into thanhtoan values(?, ?, ?, ?)";
+            stat = conn.prepareStatement(query);
+            stat.setInt(1, makhachhang);
+            stat.setInt(2, maphong);
+            stat.setString(3, sdf.format(today));
+            stat.setInt(4, tongTien);
             stat.executeUpdate();
             JOptionPane.showMessageDialog(null, "Đã thanh toán hóa đơn");
         }
