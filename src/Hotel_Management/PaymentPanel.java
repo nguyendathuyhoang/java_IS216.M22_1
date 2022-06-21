@@ -446,10 +446,10 @@ public class PaymentPanel extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"E-mail không đúng định dạng");
             clearForm();
         }
-        else if (checkoutEmail.getText().length() < 14) {
+        /*else if (checkoutEmail.getText().length() < 14) {
             JOptionPane.showMessageDialog(null,"E-mail không đúng định dạng");
             clearForm();
-        }
+        }*/
         else if (!checkoutSDT.getText().matches(sdt)){
             JOptionPane.showMessageDialog(null,"Số điện thoại không đúng định dạng");
             clearForm();
