@@ -85,8 +85,9 @@ public class StaffManagePanel extends javax.swing.JFrame {
         SDTremove = new javax.swing.JTextField();
         MKremove = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
         logoutAd = new javax.swing.JLabel();
+        stafflb = new javax.swing.JLabel();
+        thongkelb = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -402,14 +403,25 @@ public class StaffManagePanel extends javax.swing.JFrame {
 
         jPanel4.setBackground(new java.awt.Color(255, 153, 102));
 
-        jLabel6.setBackground(new java.awt.Color(102, 255, 102));
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel6.setText("QUẢN LÝ NHÂN VIÊN");
-
+        logoutAd.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         logoutAd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-logout64.png"))); // NOI18N
+        logoutAd.setText("Log out");
         logoutAd.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logoutAdMouseClicked(evt);
+            }
+        });
+
+        stafflb.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        stafflb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-staff-50.png"))); // NOI18N
+        stafflb.setText("Staff");
+
+        thongkelb.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        thongkelb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icons8-statistic-48.png"))); // NOI18N
+        thongkelb.setText("Statistic");
+        thongkelb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                thongkelbMouseClicked(evt);
             }
         });
 
@@ -418,20 +430,28 @@ public class StaffManagePanel extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53)
+                .addGap(72, 72, 72)
+                .addComponent(stafflb, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76)
+                .addComponent(thongkelb, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69)
                 .addComponent(logoutAd)
-                .addGap(25, 25, 25))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(logoutAd)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(stafflb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(logoutAd)
+                            .addComponent(thongkelb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(16, 16, 16))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -628,6 +648,13 @@ public class StaffManagePanel extends javax.swing.JFrame {
         login.setVisible(true);
     }//GEN-LAST:event_logoutAdMouseClicked
 
+    private void thongkelbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_thongkelbMouseClicked
+        // TODO add your handling code here:
+        dispose();
+        StatisticPanel stas = new StatisticPanel();
+        stas.setVisible(true);
+    }//GEN-LAST:event_thongkelbMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -688,7 +715,6 @@ public class StaffManagePanel extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -703,5 +729,7 @@ public class StaffManagePanel extends javax.swing.JFrame {
     private javax.swing.JTextField manvXoa;
     private javax.swing.JButton nvaddBTN;
     private javax.swing.JButton removeBUTTON;
+    private javax.swing.JLabel stafflb;
+    private javax.swing.JLabel thongkelb;
     // End of variables declaration//GEN-END:variables
 }
