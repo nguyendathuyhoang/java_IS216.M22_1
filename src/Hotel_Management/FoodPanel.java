@@ -297,10 +297,17 @@ public class FoodPanel extends javax.swing.JFrame {
 
     private void addfoodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addfoodActionPerformed
         // TODO add your handling code here:
-        foodCreation();
-        db.insertFood(food);
-        populateFoodTable();
-        clearAllFields();
+        if (foodname.getText().isEmpty()||foodprice.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+        }
+        else
+        {
+            foodCreation();
+            db.insertFood(food);
+            populateFoodTable();
+            clearAllFields();    
+        }
     }//GEN-LAST:event_addfoodActionPerformed
 
     private void deletefoodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletefoodActionPerformed

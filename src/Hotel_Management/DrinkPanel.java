@@ -8,6 +8,7 @@ import Class.Drink;
 import Database.DrinkDb;
 import java.sql.ResultSet;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -267,10 +268,18 @@ public class DrinkPanel extends javax.swing.JFrame {
 
     private void drinkaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drinkaddActionPerformed
         // TODO add your handling code here:
-        drinkCreation();
-        db.insertDrink(drink);
-        populatedrinkTable();
-        clearAllFields();
+        if (drinkname.getText().isEmpty()||drinkprice.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+        }
+        else
+        {
+            drinkCreation();
+            db.insertDrink(drink);
+            populatedrinkTable();
+            clearAllFields();
+            
+        }
     }//GEN-LAST:event_drinkaddActionPerformed
 
     private void drinkeditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drinkeditActionPerformed

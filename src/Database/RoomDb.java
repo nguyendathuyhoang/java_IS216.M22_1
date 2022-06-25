@@ -5,6 +5,7 @@
 package Database;
 
 import Class.*;
+import java.awt.HeadlessException;
 import java.sql.*;
 import javax.swing.*;
 
@@ -24,17 +25,16 @@ public class RoomDb {
     {
         try
         {
-            String insertRoom = "insert into phong(giaphong, loaiphong, available) values("+room.getRoom_price()+
-                    ",'"+room.getRoom_type()+"',"+room.isRoom_empty()+")";
+            String insertRoom = "insert into phong(giaphong, loaiphong, available) values("+ room.getRoom_price() +
+                ",'"+room.getRoom_type()+"',"+room.isRoom_empty()+")";
             stat = conn.prepareStatement(insertRoom);
             stat.execute();
             JOptionPane.showMessageDialog(null, "Thêm phòng thành công!");
         }
-        catch(Exception e)
-        {
+        catch(HeadlessException | SQLException | NumberFormatException e)
+        {  
             System.out.println(e);
-            JOptionPane.showMessageDialog(null, "Lỗi! Thêm phòng thất bại!!!");
-            
+            JOptionPane.showMessageDialog(null, "Lỗi! Thêm phòng thất bại");
         }
         finally
         {

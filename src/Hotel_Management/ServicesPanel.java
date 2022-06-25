@@ -284,10 +284,18 @@ public class ServicesPanel extends javax.swing.JFrame {
 
     private void addserviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addserviceActionPerformed
         // TODO add your handling code here:
-        serviceCreation();
-        db.insertService(service);
-        populateserviceTable();
-        clearAllFields();
+        if (servicename.getText().isEmpty()||serviceprice.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+        }
+        else
+        {
+            serviceCreation();
+            db.insertService(service);
+            populateserviceTable();
+            clearAllFields();
+            
+        }
     }//GEN-LAST:event_addserviceActionPerformed
 
     private void editserviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editserviceActionPerformed

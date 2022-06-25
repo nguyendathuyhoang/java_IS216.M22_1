@@ -62,22 +62,17 @@ public class RoomPanel extends javax.swing.JFrame {
     private void roomCreation()
     {
         room = new Room(); // Tạo room
+        room.setRoom_price(Integer.parseInt(roomPrice.getText()));
         //room.setRoom_id(roomid.getText()); // Lấy mã room từ textfield
         room.setRoom_type(cbType.getSelectedItem().toString()); // Lấy roomtype từ combo box
-        room.setRoom_price(Integer.parseInt(roomPrice.getText())); // Lấy giá room từ textfield
+     // Lấy giá room từ textfield
         room.setRoom_empty(roomck.isSelected()); // lấy giá trị boolean available từ check box
-        try {
-            room.setRoom_id(Integer.parseInt(roomId.getText()));
-        } catch (Exception ex) {
-            room.setRoom_id(-1);
-        }
     }
     
     private void populateRoomTable()
     {
         rs = db.getRoom();
         roomtb.setModel(DbUtils.resultSetToTableModel(rs));
-        
         db.flushAll();
     }
     
@@ -89,7 +84,6 @@ public class RoomPanel extends javax.swing.JFrame {
         // System.out.println(selectedIndex);
         cbType.setSelectedIndex(selectedIndex+1);
         roomck.setSelected((roomtb.getModel().getValueAt(row, 3)+"").equals("true") ? true:false);
-        
     }
     
     private void clearAllFields()
@@ -365,10 +359,18 @@ public class RoomPanel extends javax.swing.JFrame {
 
     private void roomAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomAddActionPerformed
         // TODO add your handling code here:
-        roomCreation();
-        db.insertRoom(room);
-        populateRoomTable();
-        clearAllFields();
+        try {
+//            System.out.println(roomPrice.getText());
+            roomCreation();
+            db.insertRoom(room);
+            populateRoomTable();
+            clearAllFields();
+        }
+        catch(Exception e) {
+            System.out.print(e);
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Lỗi");
+        }
     }//GEN-LAST:event_roomAddActionPerformed
 
     private void roomEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomEditActionPerformed
@@ -396,7 +398,7 @@ public class RoomPanel extends javax.swing.JFrame {
         
         int row = roomtb.getSelectedRow();
         displayToTextFields(row);
-        roomCreation(); 
+        roomCreation();
     }//GEN-LAST:event_roomtbMouseClicked
 
     private void cbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTypeActionPerformed
